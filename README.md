@@ -19,7 +19,7 @@ Hello, my name is YuanJi Qiu. I am current graduate student at University of Sou
 
 
 <p align="center">
-<img src="./profile/profile1.jpeg" width="270" height="320" border="10">
+<img src="./profile/profile1.JPEG" width="270" height="320" border="10">
  </p>
 
 
