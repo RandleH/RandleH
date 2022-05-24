@@ -1,5 +1,5 @@
 
-#include <climits>
+#include "../inc/rh_math.hpp"
 
 
 namespace rh_math{

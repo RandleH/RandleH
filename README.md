@@ -48,13 +48,12 @@ The idea behind this libraries is that they're easy to distribute and deploy bec
 
 All libraries was developed by RandleH under the MIT license. 
 
-| Library                      | Latest Version | Language | Category | LoC  | Description                                              |
-| ---------------------------- | -------------- | -------- | -------- | ---- | -------------------------------------------------------- |
-| [rh_lib.cc](./src/rh_lib.cc) | 1.0.0          | C++      | utility  |      | [read more]() - Fast search and sorting algorithm        |
-| [rh_libc.c](./src/rh_libc.c) | 1.0.0          | C        | utility  |      | [read more]() - Reliable memory management               |
-| rh_img.hpp                   | 1.0.0          | C++      | graphics |      | [read more]() - image loading/decoding from file/memory: |
-| rh_img.c                     | 1.0.0          | C        | graphics |      | [read more]() - image algorithm                          |
-| rh_math.hpp                  | 1.0.0          | C++      | math     |      | [read more]() - mathematics function                     |
+| Library                        | Latest Version | Language | Category | LoC  | Description                                                  |
+| ------------------------------ | -------------- | -------- | -------- | ---- | ------------------------------------------------------------ |
+| [rh_lib.hpp](./src/rh_lib.hpp) | 1.0.0          | C++      | utility  | 151  | [read more](./doc/rh_lib.md) - Fast search and sorting algorithm |
+| [rh_lib.c](./src/rh_libc.c)    | 1.0.0          | C        | utility  | 460  | [read more](./doc/rh_lib.md) - Reliable memory management    |
+| rh_img.c                       | 1.0.0          | C        | graphics |      | [read more]() - image algorithm                              |
+| rh_math.cc                     | 1.0.0          | C++      | math     | 70   | [read more]() - mathematics function                         |
 
 
 
@@ -72,7 +71,6 @@ All libraries was developed by RandleH under the MIT license.
 - [read more]() - **Use keyboard and toss the mouse**
 
   
-
 
 
 
