@@ -94,16 +94,29 @@ void                      msort              ( _RandomAccessIterator first, _Ran
     if( __len<=1 ) return;
 
     // Merge
-    _RandomAccessIterator __prev = first+__len;
-    _RandomAccessIterator __post = __prev  + 1;
-    rh_lib::msort(  first, __prev );
-    rh_lib::msort( __post,   last );
+    _RandomAccessIterator __mid = first+ (__len>>1);
+    rh_lib::msort(  first, __mid );
+    rh_lib::msort( __mid,   last );
     
     const size_t size = sizeof( *first );
     void*        ptmp = alloca( __len*size );
     
-    
-
+    char* ptr  = (char*)ptmp;
+    _RandomAccessIterator ptr1 = first;
+    _RandomAccessIterator ptr2 = __mid;
+    while( ptr1!=__mid || ptr2!=last ){
+        while( ptr1!=__mid  && (ptr2==last || *ptr1 < *ptr2) ){
+            memcpy( ptr, &(*ptr1), size);
+            ptr += size;
+            ++ptr1;
+        }
+        while( ptr2!=last && (ptr1==__mid || *ptr1 >= *ptr2) ){
+            memcpy( ptr, &(*ptr2), size);
+            ptr += size;
+            ++ptr2;
+        }
+    }
+    memcpy( &(*first), ptmp, __len*size);
 }
 
 template<class _RandomAccessIterator>
