@@ -1,10 +1,5 @@
 
-#include <stddef.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <limits.h>
-#include <stdio.h>
+#include "../inc/rh_lib.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -221,7 +216,7 @@ void*    rh_libc__malloc_deinit(void){
 }
 
 
-const char* rh_libc__bin_itoa  (uint8_t  x){
+const volatile char* rh_libc__bin_itoa  (uint8_t  x){
     static char pTmp[(sizeof(uint8_t)<<3)+1] = {0};
     
     memset( pTmp , '\0' ,  (sizeof(uint8_t)<<3)+1 );
@@ -252,7 +247,7 @@ const char* rh_libc__bin_itoa  (uint8_t  x){
 
     return pTmp;
 }
-const char* rh_libc__bin_ltoa  (uint32_t x){
+const volatile char* rh_libc__bin_ltoa  (uint32_t x){
     static char pTmp[(sizeof(uint32_t)<<3)+1] = {0};
     char* pTmp_iter = pTmp;
     
@@ -271,7 +266,7 @@ const char* rh_libc__bin_ltoa  (uint32_t x){
     }
     return pTmp;
 }
-const char* rh_libc__bin_ftoa  (float    x){
+const volatile char* rh_libc__bin_ftoa  (float    x){
     static char pTmp[(sizeof(float)<<3)+1] = {0};
     char* pTmp_iter = pTmp;
     

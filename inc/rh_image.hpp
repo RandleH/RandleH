@@ -69,8 +69,7 @@ void* Img<T>::load(const char* path){
     std::cout<<n_rows<<'x'<<n_cols<<std::endl<<"Channel:"<<ch<<std::endl;
     
   
-    
-//    stbi_image_free(ptr);
+
     
     return ptr1;
 }

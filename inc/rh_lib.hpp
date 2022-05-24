@@ -3,6 +3,7 @@
 
 #include <cstdbool>
 #include <cstddef>
+#include <algorithm>
 
 namespace rh_lib{
 
@@ -140,8 +141,6 @@ long rand( long __s, long __e){
     long __p = __e - __s;
     return (long)__s+(rh_lib::rand()%__p);
 }
-
-
 
 
 }
