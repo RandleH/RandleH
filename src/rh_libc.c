@@ -3,10 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <limits.h>
+#include <stdio.h>
 
-//#ifdef __cplusplus
-//extern "C"{
-//#endif
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 void*    rh_libc__bit_stream_SHL( void *base, size_t len, size_t bit ){
     size_t H = bit>>3;
@@ -55,31 +57,33 @@ uint32_t rh_libc__bit_b2g    ( uint32_t __a ){
 
 
 
-/*--------------------------------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------
  * Memory Node Should be odered by the member of index
  *
  *
- *    Node1     ->>   Node2       ->>     Node3             ->>      Node4       Nodes
- *    Memory1   ->>   Memory2     ->>     Memory3           ->>      Memory4     Used Memory
- *       |               |                   |                          |
- *       |               |                   |                          |
- * [ xxxxxxxxx________xxxxxxx_______xxxxxxxxxxxxxxxxxxx____________xxxxxxxxxxx________ ] Virtual Heap
- * index=0                                                                   index=32768
+ *    Memory1   ->>   Memory2     ->>     Memory3           ->>      Memory4                 Reserved Info ( size=rh_static__memory_infocnt )
+ *       |               |                   |                          |                          |
+ *       |               |                   |                          |                          |
+ * [ xxxxxxxxx________xxxxxxx_______xxxxxxxxxxxxxxxxxxx____________xxxxxxxxxxx______________##############] Virtual Malloc Memory
+ *                                                                                          |
+ *                                                                                          |
+ *                                                                                       rh_static_memory_infoptr
  *
- --------------------------------------------------------------------------------------------------------*/
-static uint8_t *rh_static__memory_ptr        = NULL;
-static size_t   rh_static__memory_size       = 0;
-static size_t   rh_static__memory_free       = 0;
-static size_t   rh_static__memory_allocated  = 0;
+ *
+ * index=0                                                                                      index=rh_static__memory_size-1
+ *
+ -----------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-    
-static struct __MallocNode_t{
-    unsigned long            index;
+typedef struct MallocInfo_t{
     size_t                   byte;
-    void*                    ptr;
-    struct __MallocNode_t*   pNextNode;
-}*pHeapMemoryHeadNode = NULL;
-    
+    size_t                   idx;
+}MallocInfo_t;
+static uint8_t        *rh_static__memory_ptr        = NULL;
+static size_t          rh_static__memory_size       = 0;
+static size_t          rh_static__memory_free       = 0;
+static size_t          rh_static__memory_allocated  = 0;
+static MallocInfo_t   *rh_static__memory_infoptr    = NULL;
+static size_t          rh_static__memory_infocnt    = 0;
     
 void*    rh_libc__malloc_init(void* __global_allocated_ptr, size_t byte){
     rh_static__memory_ptr      = __global_allocated_ptr;
@@ -88,68 +92,82 @@ void*    rh_libc__malloc_init(void* __global_allocated_ptr, size_t byte){
     return __global_allocated_ptr;
 }
     
-void*    rh_libc__malloc(size_t size){
-    size_t size_need       = size;
-    if( rh_static__memory_allocated + size_need > rh_static__memory_size )
-        return NULL;
-    else{
-        rh_static__memory_allocated += size_need;
-        // It doesn't mean there is enough space to allocate.
-    }
+static size_t rh_libc__best_fit( size_t size ){
+    if( !rh_static__memory_infoptr ) return 0;
     
-    void* ptr = NULL;
-    struct __MallocNode_t* pNode     = pHeapMemoryHeadNode;
-    struct __MallocNode_t* pNewNode  = (struct __MallocNode_t*)malloc(sizeof(struct __MallocNode_t));
-    struct __MallocNode_t* pForeward = NULL,*pBackward = NULL;
-    size_t minDist                   = rh_static__memory_size;
-    
-    pNewNode->byte      = size_need;
-    pNewNode->pNextNode = NULL;
-    
-    // Special Condition. There isn't any allocated memory.
-    if(pNode == NULL){
-        pHeapMemoryHeadNode = pNewNode;
-        pNewNode->index     = 0;
-        pNewNode->ptr       = ptr = &rh_static__memory_ptr[pNewNode->index];
-        rh_static__memory_free -= size_need;
-        return ptr;
-    }
-    
-    // Search the optimal memory block for users.
-    while(pNode != NULL){
-        size_t size_free = 0;
-        // All nodes should be ordered by the member of "index". Which means...
-        // "pNode->index" is always ahead of "pNextNode->index" or there will be a problem.
-        if(pNode->pNextNode != NULL){
-            size_free = (pNode->pNextNode->index) - (pNode->index + pNode->byte);
+    MallocInfo_t *ptr    = rh_static__memory_infoptr;
+    size_t free_byte_optim = rh_static__memory_free;
+    size_t free_idx_optim  = LONG_MAX;
+    for( size_t i=0; i<=rh_static__memory_infocnt; ++i ){
+        if( i==0 ){
+            size_t free_byte = ptr[0].idx;
+            if( free_byte >= size && free_byte_optim > free_byte ){
+                free_byte_optim = free_byte;
+                free_idx_optim  = 0;
+            }
+        }else if( i<rh_static__memory_infocnt ){
+            size_t free_byte = ptr[i].idx - ptr[i-1].idx - ptr[i-1].byte;
+            if( free_byte >= size && free_byte_optim > free_byte ){
+                free_byte_optim = free_byte;
+                free_idx_optim  = ptr[i-1].idx+ptr[i-1].byte;
+            }
         }else{
-            size_free = (rh_static__memory_size-1) - ((pNode->index) + (pNode->byte));
+            size_t free_byte = rh_static__memory_size - rh_static__memory_infocnt*sizeof(MallocInfo_t) - ptr[i-1].idx - ptr[i-1].byte;
+            if( free_byte >= size && free_byte_optim > free_byte ){
+                free_byte_optim = free_byte;
+                free_idx_optim  = ptr[i-1].idx+ptr[i-1].byte;
+            }
         }
-        if( size_free - size_need < minDist && size_free >= size_need ){
-            minDist             = size_free - size_need;
-            ptr                 = &rh_static__memory_ptr[ (pNode->index + pNode->byte) ];
-
-            pForeward           = pNode;
-            pBackward           = pNode->pNextNode;
-            pNewNode->index     = (pForeward->index + pForeward->byte);
-            pNewNode->pNextNode = pBackward;
-            pNewNode->ptr       = ptr;
-        }
-        // Continue to search...
-        pNode = pNode->pNextNode;
+        
     }
     
-    if(ptr != NULL && pForeward != NULL && pNewNode != NULL){
-        // Found enough space to allocate
-        pForeward->pNextNode = pNewNode;
-        pNewNode->pNextNode  = pBackward;
-    }else{
-        // Fail to find enough space to allocate
-        free(pNewNode);
-        rh_static__memory_allocated -= size_need;
+    return free_idx_optim;
+}
+
+
+void*    rh_libc__malloc(size_t size){
+    if( rh_static__memory_allocated + size > rh_static__memory_size )
+        return NULL;
+    
+    if( rh_static__memory_infocnt==0 ){
+        ++rh_static__memory_infocnt;
+        rh_static__memory_infoptr = (MallocInfo_t*)(rh_static__memory_ptr+rh_static__memory_size-sizeof(MallocInfo_t));
+        rh_static__memory_infoptr->byte = size;
+        rh_static__memory_infoptr->idx  = 0;
+        rh_static__memory_allocated += size;
+        rh_static__memory_free      -= size;
+        return rh_static__memory_ptr;
     }
-    rh_static__memory_free = rh_static__memory_size - rh_static__memory_allocated ;
-    return ptr;
+    
+    MallocInfo_t res = {
+        .idx   = rh_libc__best_fit( size ) ,\
+        .byte  = size
+    };
+    
+    if( res.idx==LONG_MAX ) return NULL;
+    
+    size_t a = rh_static__memory_infocnt;
+    {   // Insert the new malloc information
+        MallocInfo_t *ptr    = rh_static__memory_infoptr;
+        ptrdiff_t l=0, r=rh_static__memory_infocnt-1;
+        ptrdiff_t m=l+((r-l)>>1);
+        while (l <= r) {
+            m = l+((r-l)>>1);
+            if( res.idx <= ptr[m].idx ){
+                a = m;
+                r = m-1;
+            }else{
+                l = m+1;
+            }
+        }
+    }
+    rh_static__memory_infoptr    = memmove( (void*)(rh_static__memory_infoptr-1), (void*)(rh_static__memory_infoptr), a*sizeof(MallocInfo_t));
+    rh_static__memory_infoptr[a] = res;
+    ++rh_static__memory_infocnt;
+    rh_static__memory_allocated += size;
+    rh_static__memory_free      -= size;
+    
+    return &rh_static__memory_ptr[ rh_static__memory_infoptr[a].idx ];
 }
 void*    rh_libc__calloc(size_t count, size_t size){
     size_t  byt = count*size;
@@ -157,49 +175,49 @@ void*    rh_libc__calloc(size_t count, size_t size){
     if(ptr==NULL) return ptr;
     return memset( ptr, 0, byt );
 }
-void     rh_libc__free(void *ptr){
-    unsigned long index = (unsigned long)((unsigned char*)ptr - rh_static__memory_ptr);
-    struct __MallocNode_t* pNode     = pHeapMemoryHeadNode;
-    struct __MallocNode_t* pForeward = NULL;
-    while(pNode != NULL){
-        if(pNode->index == index && pNode->ptr == ptr){
-            if(pForeward != NULL){
-                pForeward->pNextNode = pNode->pNextNode;
-                rh_static__memory_allocated -= pNode->byte;
-                free(pNode);
+void     rh_libc__free( void* ptr){
+    assert( rh_static__memory_infocnt!=0 );
+    
+    ptrdiff_t idx = (char*)ptr > (char*)rh_static__memory_ptr? ((char*)ptr-(char*)rh_static__memory_ptr) : ((char*)rh_static__memory_ptr-(char*)ptr);
+    assert( idx<rh_static__memory_size ); // This pointer exceeds the reasonable range
+    
+    size_t a = 0;
+    {
+        ptrdiff_t l=0, r=rh_static__memory_infocnt-1;
+        ptrdiff_t m=l+((r-l)>>1);
+        
+        while (l <= r) {
+            m = l+((r-l)>>1);
+            if( rh_static__memory_infoptr[m].idx == idx ){
+                a = m;
+                goto PTR_FOUND;
+            }else if( rh_static__memory_infoptr[m].idx > idx ){
+                r = m-1;
             }else{
-                // 前节点为空只可能pNode为pHeapMemoryHeadNode
-            
-                // RH_ASSERT( pNode == pHeapMemoryHeadNode );
-                // RH_ASSERT( pNode->ptr == rh_static__memory_ptr );
-            
-                rh_static__memory_allocated -= pNode->byte;
-                pHeapMemoryHeadNode = NULL;
-                free(pNode);
+                l = m+1;
             }
-            break;
         }
-        pForeward = pNode;
-        pNode     = pNode->pNextNode;
     }
-    rh_static__memory_free = rh_static__memory_size - rh_static__memory_allocated;
+    assert(0); // This pointer hasn't been allocated
+PTR_FOUND:
+    rh_static__memory_allocated -= rh_static__memory_infoptr[a].byte;
+    rh_static__memory_free      += rh_static__memory_infoptr[a].byte;
+    if( rh_static__memory_infocnt==1 )
+        rh_static__memory_infoptr = NULL;
+    else{
+        rh_static__memory_infoptr = memmove( (void*)(rh_static__memory_infoptr+1), (void*)(rh_static__memory_infoptr), a*sizeof(MallocInfo_t));
+    }
+    --rh_static__memory_infocnt;
 }
-
 void*    rh_libc__malloc_deinit(void){
     uint8_t *ptr = rh_static__memory_ptr;
-    
-    struct __MallocNode_t *pList = pHeapMemoryHeadNode;
-    while( !pList ){
-        struct __MallocNode_t *pTmp = pList->pNextNode;
-        free(pList);
-        pList = pTmp;
-    }
-    
     rh_static__memory_size          = 0;
     rh_static__memory_free          = 0;
     rh_static__memory_allocated     = 0;
     rh_static__memory_ptr           = NULL;
-    return ptr;
+    rh_static__memory_infoptr       = NULL;
+    rh_static__memory_infocnt       = 0;
+    return memset( ptr, 0x00, rh_static__memory_size);
 }
 
 
@@ -325,7 +343,6 @@ void     rh_libc__shell_sort  ( void *base, size_t nel, size_t width, int (*comp
     }
 }
     
-
 int      rh_libc__memswap     ( void* __a, void* __b, size_t size ){
     ptrdiff_t offset = __a - __b;
     if( offset<0 ) offset = -offset;
@@ -381,7 +398,68 @@ void*    rh_libc__memgrb_area ( void* __dst,const void* __src,  size_t size, siz
 }
 
 
+void     rh_libc__debug_malloc_print( int (*print_func)( const char*, ...) ){
+    MallocInfo_t *ptr = rh_static__memory_infoptr;
+    print_func( "|\t Idx\t|\tByte\t|\n" );
+    for( size_t i=0; i<rh_static__memory_infocnt; ++i ){
+        print_func( "|\t%4ld\t|\t%4ld\t|\n", ptr[i].idx, ptr[i].byte );
+    }
+}
 
-//#ifdef __cplusplus
-//}
-//#endif
+static void rh_libc__test_malloc_0(void){
+    uint8_t heap[1024] = {0};
+    rh_libc__malloc_init( heap, 1024);
+    for( size_t i=0, j=0; i<rh_static__memory_size-j; ++i, j+=sizeof(MallocInfo_t) ){
+        uint8_t *ptr1 = rh_libc__malloc(1);
+        assert( ptr1==&heap[i] );  // 内存申请返回指针不符合逻辑, 无释放则最优解应逐字节递增
+    }
+    rh_libc__malloc_deinit();
+}
+static void rh_libc__test_malloc_1(void){
+    uint8_t heap[1024] = {0};
+    rh_libc__malloc_init( heap, 1024);
+    
+    uint8_t *ptr1 = rh_libc__malloc(10);
+    uint8_t *ptr2 = rh_libc__malloc(10);
+    rh_libc__free(ptr1);
+    rh_libc__free(ptr2);
+    
+    
+    // malloc memory for 10 times
+    void *ptrs[10] = {0};
+    for( size_t i=0; i<10; ++i ){
+        ptrs[i] = rh_libc__malloc( random()%8 );
+    }
+    
+    // shuffle the address
+    for( size_t i=0; i<0xff; ++i ){
+        size_t a = rand()%10;
+        size_t b = rand()%10;
+        void* ptr = ptrs[a];
+        ptrs[a]   = ptrs[b];
+        ptrs[b]   = ptr;
+    }
+    
+    for( size_t i=0; i<10; ++i ){
+        rh_libc__free( ptrs[i] );
+    }
+    
+    assert( !rh_static__memory_infoptr );
+    rh_libc__malloc_deinit();
+}
+static void(*test_malloc[])(void) = {
+    rh_libc__test_malloc_0 , // 逐字节动态申请, 不释放
+    rh_libc__test_malloc_1 , // 随机大小动态申请, 随机顺序释放
+};
+
+void     rh_libc__test_malloc(void){
+    for( size_t i=0; i<sizeof(test_malloc)/sizeof(void*); ++i ){
+        (*test_malloc[i])();
+    }
+}
+
+
+
+#ifdef __cplusplus
+}
+#endif
