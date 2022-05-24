@@ -42,11 +42,19 @@ People say I am so crazy, a total trouble maker in life. I humbly accept that.
 
 Appearantly, this is not just my autobiography. This is a serious GitHub project that contains years of my efforts on embedded software development. I would like to share with you how useful it is and what is the best way to migrate on your own project.
 
+The idea behind this libraries is that they're easy to distribute and deploy because all the code is contained in a single file. Some may ask whether they are better somehow since some of these libraries seem redundant to existing open source libraries. Well, generally, they are only better in that they are easier to use and release.
 
 
 
+All libraries was developed by RandleH under the MIT license. 
 
-
+| Library                      | Latest Version | Language | Category | LoC  | Description                                              |
+| ---------------------------- | -------------- | -------- | -------- | ---- | -------------------------------------------------------- |
+| [rh_lib.cc](./src/rh_lib.cc) | 1.0.0          | C++      | utility  |      | [read more]() - Fast search and sorting algorithm        |
+| [rh_libc.c](./src/rh_libc.c) | 1.0.0          | C        | utility  |      | [read more]() - Reliable memory management               |
+| rh_img.hpp                   | 1.0.0          | C++      | graphics |      | [read more]() - image loading/decoding from file/memory: |
+| rh_img.c                     | 1.0.0          | C        | graphics |      | [read more]() - image algorithm                          |
+| rh_math.hpp                  | 1.0.0          | C++      | math     |      | [read more]() - mathematics function                     |
 
 
 
@@ -64,6 +72,7 @@ Appearantly, this is not just my autobiography. This is a serious GitHub project
 - [read more]() - **Use keyboard and toss the mouse**
 
   
+
 
 
 
