@@ -52,7 +52,7 @@ Appearantly, this is not just my autobiography. This is a serious GitHub project
 
 ## Tips for Code
 
-- [read more]() - **Don't write junky code **
+- [read more]() - **Don't write junky code**
 - [read more]() - **Don't copy others code**
 
 - [read more]() - **Be patient and get some sleep**
