@@ -59,7 +59,7 @@ Appearantly, this is not just my autobiography. This is a serious GitHub project
 
 - [read more]() - **Good Integrated Development Environment(IDE) is important**
 
-- [read more]() - **Make full preparation before writing **
+- [read more]() - **Make full preparation before writing**
 
 - [read more]() - **Use keyboard and toss the mouse**
 
