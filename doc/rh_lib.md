@@ -15,7 +15,7 @@ This library contains lower-level interface functions, aiming to provide useful 
 
 | Name                                              | Description                                          |
 | ------------------------------------------------- | ---------------------------------------------------- |
-| **API in C **                                     |                                                      |
+| **API in C**                                     |                                                      |
 | [rh_libc__malloc_init](#rh_libc__malloc_init)     | Initialize the dynamic memory allocation program.    |
 | [rh_libc__malloc](#rh_libc__malloc)               | Allocate memory.                                     |
 | [rh_libc__calloc](#rh_libc__calloc)               | Allocate memory and reset values to `0x00`.          |
@@ -58,7 +58,7 @@ This library contains lower-level interface functions, aiming to provide useful 
 
 - **Implimentation**
 
-  - `step 1`
+  - **step 1**
 
     > There are six static variables maintaining the entire dynamic memory allocation process.
     >
@@ -74,7 +74,7 @@ This library contains lower-level interface functions, aiming to provide useful 
     >
     > `rh_static__memory_infocnt` denotes how many information blocks have been generated.
 
-  - `step 2`
+  - **step 2**
 
     >Initialize the above parameters to `0` or `NULL`.
     >
@@ -84,7 +84,7 @@ This library contains lower-level interface functions, aiming to provide useful 
     >
     >Set the `rh_static__memory_ptr` as the `__global_allocated_ptr`.
 
-  - `setp 3`
+  - **step 3**
 
     > Set all the memory to `0x00` .
     >
@@ -124,7 +124,7 @@ This library contains lower-level interface functions, aiming to provide useful 
 
 - **Implimentation**
 
-  - `step 1`
+  - **step 1**
 
     > There are two strategies to search a valid dynamic memory ie.( `Best fit` and `Found then return` ). 
     >
@@ -138,7 +138,7 @@ This library contains lower-level interface functions, aiming to provide useful 
     >
     > For the impliment of `rh_libc__sbrk`, see [this](#rh_libc__sbrk).
 
-  - `step 2`
+  - **step 2**
 
     >Now introduce the memory block information. Given a pointer to something allocated by our malloc, we have no idea what size block is associated with it. A common trick to work around this is to store meta-information about a memory region in some space that we squirrel away just below the pointer that we return. Here is the structure of memory block information.
     >
@@ -183,7 +183,7 @@ This library contains lower-level interface functions, aiming to provide useful 
     >
     > 
     
-  - `step 3`
+  - **step 3**
 
     >Insert meta information, we need to keep the meta-information sorted by its member `idx`, therefore it's reasonable to use **binary search** to insert an element.
     >
@@ -228,7 +228,7 @@ This library contains lower-level interface functions, aiming to provide useful 
 
 - **Implimentation**
 
-  - `step 1`
+  - **step 1**
 
     > Call the `rh_libc_malloc` first and set all elements zero.
 
@@ -268,7 +268,7 @@ This library contains lower-level interface functions, aiming to provide useful 
 
 - **Implimentation**
 
-  - `step 1`
+  - **step 1**
 
     > First is to locate which meta-information this pointer correspond to. By calculating the difference from top of the heap, we get the index. Index, to some extend, is the offset address with respect to the top pointer.
     >
@@ -276,13 +276,13 @@ This library contains lower-level interface functions, aiming to provide useful 
     >
     > If it was not found, abort the program. 
 
-  - `step 2`
+  - **step 2**
 
     >Remove the corresponding meta-information.
     >
     >Move the `rh_static__memory_infoptr` backward by one unit.
 
-  - `setp 3`
+  - **setp 3**
 
     > Adjust the  `rh_static__memory_free`  and `rh_static__memory_allocated` value.
 
@@ -316,13 +316,13 @@ This library contains lower-level interface functions, aiming to provide useful 
 
 - **Implimentation**
 
-  - `step 1`
+  - **step 1**
 
     > Set the heap array to zero.
     >
     > Reset all the static value that is `rh_static__memory_xxxx` to zero.
 
-  - `step 2`
+  - **step 2**
 
     >Release the heap array pointer and return it.
 
