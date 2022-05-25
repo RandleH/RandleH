@@ -87,7 +87,7 @@ void*    rh_libc__malloc_init(void* __global_allocated_ptr, size_t byte){
     return __global_allocated_ptr;
 }
     
-static size_t rh_libc__best_fit( size_t size ){
+static size_t rh_libc__sbrk( size_t size ){
     if( !rh_static__memory_infoptr ) return 0;
     
     MallocInfo_t *ptr    = rh_static__memory_infoptr;
@@ -135,7 +135,7 @@ void*    rh_libc__malloc(size_t size){
     }
     
     MallocInfo_t res = {
-        .idx   = rh_libc__best_fit( size ) ,\
+        .idx   = rh_libc__sbrk( size ) ,\
         .byte  = size
     };
     
