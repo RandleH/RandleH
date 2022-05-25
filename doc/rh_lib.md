@@ -15,7 +15,7 @@ This library contains lower-level interface functions, aiming to provide useful 
 
 | Name                                              | Description                                          |
 | ------------------------------------------------- | ---------------------------------------------------- |
-| **API in C**                                     |                                                      |
+| **API in C**                                      |                                                      |
 | [rh_libc__malloc_init](#rh_libc__malloc_init)     | Initialize the dynamic memory allocation program.    |
 | [rh_libc__malloc](#rh_libc__malloc)               | Allocate memory.                                     |
 | [rh_libc__calloc](#rh_libc__calloc)               | Allocate memory and reset values to `0x00`.          |
