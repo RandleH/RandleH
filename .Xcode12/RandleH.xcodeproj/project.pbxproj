@@ -40,6 +40,7 @@
 		E3A5EC98283D7CBB003D754E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		E3A5EC9B283D8291003D754E /* test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
 		E3A5EC9C283D8291003D754E /* test.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = test.hpp; sourceTree = "<group>"; };
+		E3A5ECA1283EE84D003D754E /* rh_color.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rh_color.h; path = ../inc/rh_color.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +77,7 @@
 		E3A5EC89283D7BB8003D754E /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				E3A5ECA1283EE84D003D754E /* rh_color.h */,
 				E3A5EC8D283D7BE4003D754E /* rh_image.hpp */,
 				E3A5EC8B283D7BE4003D754E /* rh_lib.hpp */,
 				E3A5EC8C283D7BE4003D754E /* rh_lib.h */,

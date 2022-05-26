@@ -50,10 +50,12 @@ All libraries was developed by RandleH under the MIT license.
 
 | Library                        | Latest Version | Language | Category | LoC  | Description                                                  |
 | ------------------------------ | -------------- | -------- | -------- | ---- | ------------------------------------------------------------ |
-| [rh_lib.hpp](./src/rh_lib.hpp) | 1.0.0          | C++      | utility  | 151  | [read more](./doc/rh_lib.md) - Fast search and sorting algorithm |
-| [rh_lib.c](./src/rh_libc.c)    | 1.0.0          | C        | utility  | 460  | [read more](./doc/rh_lib.md) - Reliable memory management    |
-| rh_img.c                       | 1.0.0          | C        | graphics |      | [read more]() - image algorithm                              |
-| rh_math.cc                     | 1.0.0          | C++      | math     | 70   | [read more]() - mathematics function                         |
+| [rh_lib.hpp](./src/rh_lib.hpp) | 0.0.1          | C++      | utility  | 151  | [read more](./doc/rh_lib.md) - Fast search and sorting algorithm |
+| [rh_lib.c](./src/rh_libc.c)    | 0.0.1          | C        | utility  | 460  | [read more](./doc/rh_lib.md) - Reliable memory management    |
+| rh_img.c                       | 0.0.1          | C        | graphics |      | [read more]() - Image algorithm                              |
+| [rh_color.h](./inc/rh_color.h) | 0.0.1          | C        | graphics | 159  | [read more]() - Common macro of color depth                  |
+| rh_math.cc                     | 0.0.1          | C++      | math     | 70   | [read more]() - mathematics function                         |
+|                                |                |          |          |      |                                                              |
 
 
 
