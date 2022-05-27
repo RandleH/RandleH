@@ -59,18 +59,8 @@ All libraries was developed by RandleH under the MIT license.
 
 
 
-## Tips for Code
 
-- [read more]() - **Don't write junky code**
-- [read more]() - **Don't copy others code**
 
-- [read more]() - **Be patient and get some sleep**
-
-- [read more]() - **Good Integrated Development Environment(IDE) is important**
-
-- [read more]() - **Make full preparation before writing**
-
-- [read more]() - **Use keyboard and toss the mouse**
 
   
 
