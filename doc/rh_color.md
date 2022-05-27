@@ -62,6 +62,16 @@ stephen wolfram cellular automata
 
 
 
+<table>
+    <tr>
+        <td><font color=#FF0000>RH_COLOR_RED </font></td><td bgcolor=#00FF00>RH_COLOR_GREEN</td><td bgcolor=#0000FF>RH_COLOR_BLUE</td>
+    </tr>   
+</table>
+
+
+
+
+
 
 
 
