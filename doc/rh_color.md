@@ -74,6 +74,8 @@ stephen wolfram cellular automata
 
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `#f03c15`
 ![#FFFF00](https://via.placeholder.com/15/FFFF00/000000?text=+) `#ffffff`
+<p>
+<img src="https://via.placeholder.com/15/f03c15/000000?text=+">
+ </p>
 
-https://via.placeholder.com/15/f03c15/000000?text=+
 
