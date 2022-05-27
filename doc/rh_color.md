@@ -51,6 +51,7 @@
 | <font color="#ff4500">RH_COLOR_ORANGERED      </font> | <font color="#ffff00">RH_COLOR_YELLOW        </font> | <font color="#fffaf0">RH_COLOR_FLORALWHITE      </font> |
 | <font color="#ff6347">RH_COLOR_TOMATO         </font> | <font color="#  ffff">RH_COLOR_CYAN          </font> | <font color="#fdf5e6">RH_COLOR_OLDLACE          </font> |
 | <font color="#ffe4e1">RH_COLOR_MISTYROSE      </font> | <font color="#ff00ff">RH_COLOR_MAGENTA       </font> | <font color="#f5deb3">RH_COLOR_WHEAT            </font> |
+|  ![ff0000](https://via.placeholder.com/15/f03c15/000000?text=+)`RH_COLOR_RED`|  |  |
 
 
 
@@ -71,8 +72,8 @@ stephen wolfram cellular automata
 
 
 
-
-
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `#f03c15`
+![#FFFF00](https://via.placeholder.com/15/FFFF00/000000?text=+) `#ffffff`
 
 
 
