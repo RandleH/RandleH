@@ -59,10 +59,78 @@ stephen wolfram cellular automata
 
 
 
-|                                                   |      |      |
-| ------------------------------------------------- | ---- | ---- |
-| ![ffff00](./rh_color/ffff00.png)`RH_COLOR_YELLOW` |      |      |
-|                                                   |      |      |
-|                                                   |      |      |
+
+
+
+
+|                                                              |      |      |
+| ------------------------------------------------------------ | ---- | ---- |
+| ![fff0f5](./rh_color/fff0f5.png)`RH_COLOR_LAVENDERBLUSH  `   |      |      |
+| ![db7093](./rh_color/db7093.png)`RH_COLOR_PALEVIOLATRED  `   |      |      |
+| ![ff69b4](./rh_color/ff69b4.png)`RH_COLOR_HOTPINK        `   |      |      |
+| ![c71585](./rh_color/c71585.png)`RH_COLOR_MEDIUMVIOLATRED`   |      |      |
+| ![da70d6](./rh_color/da70d6.png)`RH_COLOR_ORCHID         `   |      |      |
+| ![d8bfd8](./rh_color/d8bfd8.png)`RH_COLOR_THISTLE        `   |      |      |
+| ![dda0dd](./rh_color/dda0dd.png)`RH_COLOR_PLUM           `   |      |      |
+| ![da70d6](./rh_color/da70d6.png)`RH_COLOR_VOILET         `   |      |      |
+| ![ff00ff](./rh_color/ff00ff.png)`RH_COLOR_DARKVOILET     `   |      |      |
+| ![800080](./rh_color/800080.png)`RH_COLOR_PURPLE         `   |      |      |
+| ![ff00ff](./rh_color/ff00ff.png)`RH_COLOR_MEDIUMORCHID   `   |      |      |
+| ![9400d3](./rh_color/9400d3.png)`RH_COLOR_DARKVIOLET     `   |      |      |
+| ![4b0082](./rh_color/4b0082.png)`RH_COLOR_INDIGO         `   |      |      |
+| ![8a2be2](./rh_color/8a2be2.png)`RH_COLOR_BLUEVIOLET     `   |      |      |
+| ![9370db](./rh_color/9370db.png)`RH_COLOR_MEDIUMPURPLE   `   |      |      |
+| ![7b68ee](./rh_color/7b68ee.png)`RH_COLOR_MEDIUMSLATEBLUE`   |      |      |
+| ![6a5acd](./rh_color/6a5acd.png)`RH_COLOR_SLATEBLUE      `   |      |      |
+| ![483d8b](./rh_color/483d8b.png)`RH_COLOR_DARKSLATEBLUE  `   |      |      |
+| ![e6e6fa](./rh_color/e6e6fa.png)`RH_COLOR_LAVENDER       `   |      |      |
+| ![f8f8ff](./rh_color/f8f8ff.png)`RH_COLOR_GHOSTWHITE     `   |      |      |
+| ![ffe4b5](./rh_color/ffe4b5.png)`RH_COLOR_MOCCASIN       `   |      |      |
+| ![ffa500](./rh_color/ffa500.png)`RH_COLOR_ORANGE         `   |      |      |
+| ![ffefd5](./rh_color/ffefd5.png)`RH_COLOR_PAPAYAWHIP     `   |      |      |
+| ![ffebcd](./rh_color/ffebcd.png)`RH_COLOR_BLANCHEDALMOND `   |      |      |
+| ![ffdead](./rh_color/ffdead.png)`RH_COLOR_NAVAJOWHITE    `   |      |      |
+| ![faebd7](./rh_color/faebd7.png)`RH_COLOR_ANTIQUEWHITE   `   |      |      |
+| ![d2b48c](./rh_color/d2b48c.png)`RH_COLOR_TAN            `   |      |      |
+| ![deb887](./rh_color/deb887.png)`RH_COLOR_BURLYWOOD      `   |      |      |
+| ![ffe4c4](./rh_color/ffe4c4.png)`RH_COLOR_BISQUE         `   |      |      |
+| ![ff8c00](./rh_color/ff8c00.png)`RH_COLOR_DARKORANGE     `   |      |      |
+| ![fff0e6](./rh_color/fff0e6.png)`RH_COLOR_LINEN          `   |      |      |
+| ![cd853f](./rh_color/cd853f.png)`RH_COLOR_PERU           `   |      |      |
+| ![f4a460](./rh_color/f4a460.png)`RH_COLOR_SANDYBROWN     `   |      |      |
+| ![d2691e](./rh_color/d2691e.png)`RH_COLOR_CHOCOLATE      `   |      |      |
+| ![fff5ee](./rh_color/fff5ee.png)`RH_COLOR_SEASHELL       `   |      |      |
+| ![a0522d](./rh_color/a0522d.png)`RH_COLOR_SIENNA         `   |      |      |
+| ![ffa07a](./rh_color/ffa07a.png)`RH_COLOR_SALMON         `   |      |      |
+| ![ff7f50](./rh_color/ff7f50.png)`RH_COLOR_CORAL          `   |      |      |
+| ![ff4500](./rh_color/ff4500.png)`RH_COLOR_ORANGERED      `   |      |      |
+| ![ff6347](./rh_color/ff6347.png)`RH_COLOR_TOMATO         `   |      |      |
+| ![ffe4e1](./rh_color/ffe4e1.png)`RH_COLOR_MISTYROSE      `   |      |      |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
