@@ -35,7 +35,7 @@ This library contains lower-level interface functions, aiming to provide useful 
 
 
 
-## Perspective Solution
+## Function Manual Reference
 
 ---
 
