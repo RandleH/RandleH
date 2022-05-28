@@ -108,30 +108,48 @@ unsigned int APHash    ( const char *str){
 
 
 static void* (*MALLOC)(size_t) = malloc;
+static void* (*REALLOC)(void*,size_t) = realloc;
 static void  (*FREE)(void*)    = free;
+
+#define M_HASH_TABLE_BIT    (10)
+#define M_HASH_TABLE_SIZE   (1<<(M_HASH_TABLE_BIT))
+#define M_HASH_MALLOC_STEP  (16)
+
+typedef struct{
+    void   *key;
+    size_t s_key;
+    void   *obj;
+}HashBucket_t;
+
+typedef struct{
+    size_t        cnt;
+    size_t        size;
+    HashBucket_t *buf;
+}HashTableEntree_t;
+
 
 
 typedef struct{
-    void * table_[256];
+    HashTableEntree_t table[M_HASH_TABLE_SIZE];
     size_t s_key;
     size_t s_obj;
 }HashTable_t;
 
-void* rh_hash__create( size_t size_key, size_t size_obj){
+void* rh_hash__create_( size_t size_key, size_t size_obj){
     HashTable_t *ptr = (HashTable_t *)MALLOC(sizeof(HashTable_t));
     ptr->s_key = size_key;
     ptr->s_obj = size_obj;
-    memset( ptr->table_, '\0', 256);
+//    memset( ptr->table, '\0', (M_HASH_TABLE_SIZE)*sizeof(HashTable_t));
     return ptr;
 }
 
-bool  rh_hash__insert_( void* handler, void* key, void* object ){
-    char *str = alloca(((HashTable_t*)handler)->s_key+1);
-    str[((HashTable_t*)handler)->s_key] = '\0';
-    memcpy(str, key, ((HashTable_t*)handler)->s_key);
-    unsigned int hash = JSHash(str);
-    printf("hash=%d\n", hash);
+bool  rh_hash__insert_table( HashTableEntree_t* entree, void* key, void* object){
+    
     return true;
+}
+
+bool  rh_hash__insert_( void* handler, void* key, void* object ){
+    return false;
 }
 
 void* rh_hash__get_( void* handler, void* key){
@@ -147,7 +165,25 @@ void* rh_hash__remove_( void* handler, void* key ){
 }
 
 
-
+void hash_test(void){
+    void *Hash1 = rh_hash__create( void*, int);
+    
+    int    obj = 1;
+    void *key = &obj;
+//    rh_hash__insert( Hash1, key, obj);
+    
+    
+    
+    do{
+        char *str = (char*)alloca(sizeof(key)+1);
+        
+        memcpy( str, &key, sizeof(key));
+        
+        str[sizeof(key)] = '\0';
+        unsigned int hash = JSHash(str);
+        printf( "hash:%d\n", hash );
+    }while(0);
+}
 
 
 

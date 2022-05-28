@@ -29,15 +29,13 @@ void foooo(void){
 
 
 
-
-
+extern"C"{
+extern void hash_test(void);
+}
 
 int main(){
-    void *Hash1 = rh_hash__create( sizeof(char*), sizeof(int));
     
-    int obj = 1;
-    rh_hash__insert( Hash1, "1", &obj);
-    
+    hash_test();
     
     
     return 0;
