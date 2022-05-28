@@ -23,7 +23,7 @@ enum class texash : char{
     kRoyalFlush
 };
 
-texash evaluate( const std::vector<rh_poker::Card> &cards);
+texash evaluate( std::vector<rh_poker::Card> cards);
 
 
 };

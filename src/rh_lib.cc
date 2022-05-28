@@ -1,7 +1,7 @@
 
 
 
-namespace rh_image{
+namespace rh_lib{
 
 
 

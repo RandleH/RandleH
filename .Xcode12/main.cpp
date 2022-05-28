@@ -18,13 +18,7 @@
 
 using namespace std;
 int main(){
-    
-   
-    
-    printf("%c", rh_app::texash::kRoyalFlush);
-    
-    
-    
+
     
     return 0;
 }
