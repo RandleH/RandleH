@@ -1,9 +1,9 @@
 
 #include "../inc/rh_lib.h"
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+//#ifdef __cplusplus
+//extern "C"{
+//#endif
 
 void*    rh_libc__bit_stream_SHL( void *base, size_t len, size_t bit ){
     size_t H = bit>>3;
@@ -119,6 +119,27 @@ static size_t rh_libc__sbrk( size_t size ){
     return free_idx_optim;
 }
 
+static size_t rh_libc__locate(void* ptr){
+    ptrdiff_t idx = (char*)ptr > (char*)rh_static__memory_ptr? ((char*)ptr-(char*)rh_static__memory_ptr) : ((char*)rh_static__memory_ptr-(char*)ptr);
+    assert( idx<rh_static__memory_size ); // This pointer exceeds the reasonable range
+    {
+        ptrdiff_t l=0, r=rh_static__memory_infocnt-1;
+        ptrdiff_t m=l+((r-l)>>1);
+        
+        while (l <= r) {
+            m = l+((r-l)>>1);
+            if( rh_static__memory_infoptr[m].idx == idx ){
+                return m;
+            }else if( rh_static__memory_infoptr[m].idx > idx ){
+                r = m-1;
+            }else{
+                l = m+1;
+            }
+        }
+    }
+    assert(0); // This pointer hasn't been allocated
+    return -1;
+}
 
 void*    rh_libc__malloc(size_t size){
     if( rh_static__memory_allocated + size > rh_static__memory_size )
@@ -172,29 +193,8 @@ void*    rh_libc__calloc(size_t count, size_t size){
 }
 void     rh_libc__free( void* ptr){
     assert( rh_static__memory_infocnt!=0 );
-    
-    ptrdiff_t idx = (char*)ptr > (char*)rh_static__memory_ptr? ((char*)ptr-(char*)rh_static__memory_ptr) : ((char*)rh_static__memory_ptr-(char*)ptr);
-    assert( idx<rh_static__memory_size ); // This pointer exceeds the reasonable range
-    
-    size_t a = 0;
-    {
-        ptrdiff_t l=0, r=rh_static__memory_infocnt-1;
-        ptrdiff_t m=l+((r-l)>>1);
-        
-        while (l <= r) {
-            m = l+((r-l)>>1);
-            if( rh_static__memory_infoptr[m].idx == idx ){
-                a = m;
-                goto PTR_FOUND;
-            }else if( rh_static__memory_infoptr[m].idx > idx ){
-                r = m-1;
-            }else{
-                l = m+1;
-            }
-        }
-    }
-    assert(0); // This pointer hasn't been allocated
-PTR_FOUND:
+    size_t a = rh_libc__locate(ptr);
+
     rh_static__memory_allocated -= rh_static__memory_infoptr[a].byte;
     rh_static__memory_free      += rh_static__memory_infoptr[a].byte;
     if( rh_static__memory_infocnt==1 )
@@ -203,6 +203,29 @@ PTR_FOUND:
         rh_static__memory_infoptr = memmove( (void*)(rh_static__memory_infoptr+1), (void*)(rh_static__memory_infoptr), a*sizeof(MallocInfo_t));
     }
     --rh_static__memory_infocnt;
+}
+void*    rh_libc__realloc(void *ptr, size_t size){
+    if( !ptr ) return rh_libc__malloc(size);
+    
+    size_t a = rh_libc__locate(ptr);
+    if( rh_static__memory_infoptr[a].byte >= size )
+        return ptr;
+    
+    size_t byte_reallocate = rh_static__memory_infoptr[a].byte; // 如果不改变首地址, 直接扩容可达到的最大容量.
+    if( a==rh_static__memory_infocnt-1 ){
+        byte_reallocate = rh_static__memory_size - rh_static__memory_infocnt*sizeof(MallocInfo_t) - rh_static__memory_infoptr[a].idx;
+    }else{
+        byte_reallocate = rh_static__memory_infoptr[a+1].idx - rh_static__memory_infoptr[a].idx;
+    }
+    
+    if( byte_reallocate >= size ){
+        rh_static__memory_infoptr[a].byte = size;
+        return ptr;
+    }
+    
+    rh_libc__free(ptr);
+    ptr = memmove( rh_libc__malloc(size), ptr, size);
+    return ptr;
 }
 void*    rh_libc__malloc_deinit(void){
     uint8_t *ptr = rh_static__memory_ptr;
@@ -401,7 +424,8 @@ void     rh_libc__debug_malloc_print( int (*print_func)( const char*, ...) ){
     }
 }
 
-static void rh_libc__test_malloc_0(void){
+#include <time.h>
+static void rh_libc__test_malloc_0( int (*print)(const char *format, ...) ){
     uint8_t heap[1024] = {0};
     rh_libc__malloc_init( heap, 1024);
     for( size_t i=0, j=0; i<rh_static__memory_size-j; ++i, j+=sizeof(MallocInfo_t) ){
@@ -409,8 +433,9 @@ static void rh_libc__test_malloc_0(void){
         assert( ptr1==&heap[i] );  // 内存申请返回指针不符合逻辑, 无释放则最优解应逐字节递增
     }
     rh_libc__malloc_deinit();
+    print( "Test Malloc Case 0: Passed.\n" );
 }
-static void rh_libc__test_malloc_1(void){
+static void rh_libc__test_malloc_1( int (*print)(const char *format, ...) ){
     uint8_t heap[1024] = {0};
     rh_libc__malloc_init( heap, 1024);
     
@@ -419,6 +444,9 @@ static void rh_libc__test_malloc_1(void){
     rh_libc__free(ptr1);
     rh_libc__free(ptr2);
     
+    
+    time_t foo;
+    srand((unsigned)time(&foo));
     
     // malloc memory for 10 times
     void *ptrs[10] = {0};
@@ -441,20 +469,51 @@ static void rh_libc__test_malloc_1(void){
     
     assert( !rh_static__memory_infoptr );
     rh_libc__malloc_deinit();
+    print( "Test Malloc Case 1: Passed.\n" );
 }
-static void(*test_malloc[])(void) = {
+static void rh_libc__test_malloc_2( int (*print)(const char *format, ...) ){
+    uint8_t heap[1024] = {0};
+    rh_libc__malloc_init( heap, 1024);
+    time_t foo;
+    srand((unsigned)time(&foo));
+    // malloc memory for 10 times
+    void *ptrs[10] = {0};
+    for( size_t i=0; i<10; ++i ){
+        size_t size = random()%8;
+        ptrs[i] = rh_libc__malloc( size );
+        assert( ptrs[i]==rh_libc__realloc( ptrs[i], size) );
+    }
+    
+    // shuffle the address
+    for( size_t i=0; i<0xff; ++i ){
+        size_t a = rand()%10;
+        size_t b = rand()%10;
+        void* ptr = ptrs[a];
+        ptrs[a]   = ptrs[b];
+        ptrs[b]   = ptr;
+    }
+    for( size_t i=0; i<10; ++i ){
+        rh_libc__free( ptrs[i] );
+    }
+    assert( !rh_static__memory_infoptr );
+    
+    rh_libc__malloc_deinit();
+    print( "Test Malloc Case 2: Passed.\n" );
+}
+static void(*test_malloc[])( int (*print)(const char *format, ...) ) = {
     rh_libc__test_malloc_0 , // 逐字节动态申请, 不释放
     rh_libc__test_malloc_1 , // 随机大小动态申请, 随机顺序释放
+    rh_libc__test_malloc_2 , // 随机大小动态申请, 动态重配
 };
 
-void     rh_libc__test_malloc(void){
+void     rh_libc__test_malloc( int (*print)(const char *format, ...) ){
     for( size_t i=0; i<sizeof(test_malloc)/sizeof(void*); ++i ){
-        (*test_malloc[i])();
+        (*test_malloc[i])(print);
     }
 }
 
 
 
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif

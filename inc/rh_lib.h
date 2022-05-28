@@ -25,8 +25,9 @@ extern void*    rh_libc__malloc_init(void* __global_allocated_ptr, size_t __nbyt
 extern void*    rh_libc__malloc(size_t __nbyte);
 extern void*    rh_libc__calloc(size_t count, size_t __nbyte);
 extern void     rh_libc__free(void *ptr);
+extern void*    rh_libc__realloc(void *ptr, size_t size);
 extern void*    rh_libc__malloc_deinit(void);
-
+extern void     rh_libc__test_malloc( int (*print)(const char *format, ...) );
 
 extern const volatile char*     rh_libc__bin_itoa  (uint8_t  x);
 extern const volatile char*     rh_libc__bin_ltoa  (uint32_t x);

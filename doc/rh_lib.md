@@ -2,7 +2,11 @@
 
 ## Overview
 
-This library contains lower-level interface functions, aiming to provide useful and easy migratable methods upon system memory allocation, common bit operation, memory operation and sorting algorithms. This library contains the following files.
+This library contains lower-level interface functions, aiming to provide useful and easy migratable methods upon system memory allocation, common bit operation, memory operation and sorting algorithms. 
+
+When we are dealing with a solution for memory management, there are two categories( ie. fixed partition and dynamic partition ). This library provides functions that review how dynamic partition works. 
+
+This library contains the following files.
 
 - [rh_lib.c](../src/rh_lib.c)
 - [rh_lib.cc](../src/rh_lib.cc)
@@ -124,22 +128,28 @@ This library contains lower-level interface functions, aiming to provide useful 
 
 - **Implimentation**
 
-  - **step 1**
+  For dynamic partition, there are also two ways to do this. One is the **First Fit Allocation** and the other is the **Best Fit Allocation**.
 
-    > There are two strategies to search a valid dynamic memory ie.( `Best fit` and `Found then return` ). 
-    >
+  **First Fit Allocation** simply finds the first partition that has sufficient storage space not taking into account how much memory can be wasted.
+  
+  **Best Fit Allocation** looks for the smallest partition resulting in more space for other tasks. Although this will result in slower performance but better efficiency.
+  
+  
+  
+  - **step 1**
+  
     > In this function, it used `best fit` to maximumly avoid memory redundancy in the system. It wil first call `rh_libc__sbrk` to search which free memory pool best fits the requirement.
-    > $$
+    >$$
     > \text{Best fit} := \min \bigg[ \text{byte(free pool)}-\text{byte(desire)} \bigg]
     > $$
     > If success, then `rh_libc__sbrk` will return a index that indicates the address of virtual heap array. Starting that index, there exists a free memory pool that best fits the requirement.
-    >
+    > 
     > If there is no memory pool that can meet the requirement, `rh_libc__sbrk` wil return `LONG_MAX`. If so, return `NULL`.
     >
     > For the impliment of `rh_libc__sbrk`, see [this](#rh_libc__sbrk).
-
+    
   - **step 2**
-
+  
     >Now introduce the memory block information. Given a pointer to something allocated by our malloc, we have no idea what size block is associated with it. A common trick to work around this is to store meta-information about a memory region in some space that we squirrel away just below the pointer that we return. Here is the structure of memory block information.
     >
     >```C
@@ -184,7 +194,7 @@ This library contains lower-level interface functions, aiming to provide useful 
     > 
     
   - **step 3**
-
+  
     >Insert meta information, we need to keep the meta-information sorted by its member `idx`, therefore it's reasonable to use **binary search** to insert an element.
     >
     >Here we have to use `memmove` since there exists the memory overlapping problem. After this operation, move the `rh_static__memory_infoptr` forward by one unit.

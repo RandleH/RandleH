@@ -73,6 +73,23 @@ unsigned long tri2 ( int x1, int y1, int x2, int y2, int x3, int y3   ){
     return (a>b)? (a-b):(b-a);
 }
 
+bool          isprime( unsigned long num ){
+    if( num==2 || num==3) {
+        return true;
+    }
+    if( num%6 != 1 && num%6 != 5) {
+        return false;
+    }
+    for ( unsigned long i=5; i*i <= num; i+=6 ) {
+        if( num%i==0 || num%(i+2)==0 ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+
 }
 
 
