@@ -32,7 +32,25 @@ People say I am so crazy, a total trouble maker in life. I humbly accept that.
 
 
 
+### 写给真爱
 
+- 我告诉你, 我喜欢你, 并不一定是要和你在一起. 只是希望在今后的你, 遭遇人生低谷的时候, 不要灰心, 至少曾经有人被你的魅力所吸引, 曾经是, 以后也会是.
+
+  
+
+### 写给孤独
+
+- 看海久了就想见人. 见人多了, 我就想看海.
+
+
+
+- 哪里有人会真正喜欢孤独. 只是不喜欢失望罢了.
+
+
+
+### 写给自由
+
+- 所谓人生, 亦如种子, 被不期而遇的风吹走. 我们都在偶然的大地上彷徨着.
 
 
 
@@ -62,7 +80,6 @@ All libraries was developed by RandleH under the MIT license.
 
 
 
-  
 
 
 

@@ -50,8 +50,6 @@ uint32_t rh_libc__bit_b2g    ( uint32_t __a ){
 }
 
 
-
-
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------
  * Memory Node Should be odered by the member of index
  *
@@ -238,6 +236,102 @@ void*    rh_libc__malloc_deinit(void){
     return memset( ptr, 0x00, rh_static__memory_size);
 }
 
+void     rh_libc__debug_malloc_print( int (*print_func)( const char*, ...) ){
+    MallocInfo_t *ptr = rh_static__memory_infoptr;
+    print_func( "|\t Idx\t|\tByte\t|\n" );
+    for( size_t i=0; i<rh_static__memory_infocnt; ++i ){
+        print_func( "|\t%4ld\t|\t%4ld\t|\n", ptr[i].idx, ptr[i].byte );
+    }
+}
+
+#include <time.h>
+static void rh_libc__test_malloc_0( int (*print)(const char *format, ...) ){
+    uint8_t heap[1024] = {0};
+    rh_libc__malloc_init( heap, 1024);
+    for( size_t i=0, j=0; i<rh_static__memory_size-j; ++i, j+=sizeof(MallocInfo_t) ){
+        uint8_t *ptr1 = rh_libc__malloc(1);
+        assert( ptr1==&heap[i] );  // 内存申请返回指针不符合逻辑, 无释放则最优解应逐字节递增
+    }
+    rh_libc__malloc_deinit();
+    print( "Test Malloc Case 0: Passed.\n" );
+}
+static void rh_libc__test_malloc_1( int (*print)(const char *format, ...) ){
+    uint8_t heap[1024] = {0};
+    rh_libc__malloc_init( heap, 1024);
+    
+    uint8_t *ptr1 = rh_libc__malloc(10);
+    uint8_t *ptr2 = rh_libc__malloc(10);
+    rh_libc__free(ptr1);
+    rh_libc__free(ptr2);
+    
+    
+    time_t foo;
+    srand((unsigned)time(&foo));
+    
+    // malloc memory for 10 times
+    void *ptrs[10] = {0};
+    for( size_t i=0; i<10; ++i ){
+        ptrs[i] = rh_libc__malloc( random()%8 );
+    }
+    
+    // shuffle the address
+    for( size_t i=0; i<0xff; ++i ){
+        size_t a = rand()%10;
+        size_t b = rand()%10;
+        void* ptr = ptrs[a];
+        ptrs[a]   = ptrs[b];
+        ptrs[b]   = ptr;
+    }
+    
+    for( size_t i=0; i<10; ++i ){
+        rh_libc__free( ptrs[i] );
+    }
+    
+    assert( !rh_static__memory_infoptr );
+    rh_libc__malloc_deinit();
+    print( "Test Malloc Case 1: Passed.\n" );
+}
+static void rh_libc__test_malloc_2( int (*print)(const char *format, ...) ){
+    uint8_t heap[1024] = {0};
+    rh_libc__malloc_init( heap, 1024);
+    time_t foo;
+    srand((unsigned)time(&foo));
+    // malloc memory for 10 times
+    void *ptrs[10] = {0};
+    for( size_t i=0; i<10; ++i ){
+        size_t size = random()%8;
+        ptrs[i] = rh_libc__malloc( size );
+        assert( ptrs[i]==rh_libc__realloc( ptrs[i], size) );
+    }
+    
+    // shuffle the address
+    for( size_t i=0; i<0xff; ++i ){
+        size_t a = rand()%10;
+        size_t b = rand()%10;
+        void* ptr = ptrs[a];
+        ptrs[a]   = ptrs[b];
+        ptrs[b]   = ptr;
+    }
+    for( size_t i=0; i<10; ++i ){
+        rh_libc__free( ptrs[i] );
+    }
+    assert( !rh_static__memory_infoptr );
+    
+    rh_libc__malloc_deinit();
+    print( "Test Malloc Case 2: Passed.\n" );
+}
+static void(*test_malloc[])( int (*print)(const char *format, ...) ) = {
+    rh_libc__test_malloc_0 , // 逐字节动态申请, 不释放
+    rh_libc__test_malloc_1 , // 随机大小动态申请, 随机顺序释放
+    rh_libc__test_malloc_2 , // 随机大小动态申请, 动态重配
+};
+
+void     rh_libc__test_malloc( int (*print)(const char *format, ...) ){
+    for( size_t i=0; i<sizeof(test_malloc)/sizeof(void*); ++i ){
+        (*test_malloc[i])(print);
+    }
+}
+
 
 const volatile char* rh_libc__bin_itoa  (uint8_t  x){
     static char pTmp[(sizeof(uint8_t)<<3)+1] = {0};
@@ -416,104 +510,19 @@ void*    rh_libc__memgrb_area ( void* __dst,const void* __src,  size_t size, siz
 }
 
 
-void     rh_libc__debug_malloc_print( int (*print_func)( const char*, ...) ){
-    MallocInfo_t *ptr = rh_static__memory_infoptr;
-    print_func( "|\t Idx\t|\tByte\t|\n" );
-    for( size_t i=0; i<rh_static__memory_infocnt; ++i ){
-        print_func( "|\t%4ld\t|\t%4ld\t|\n", ptr[i].idx, ptr[i].byte );
-    }
-}
-
-#include <time.h>
-static void rh_libc__test_malloc_0( int (*print)(const char *format, ...) ){
-    uint8_t heap[1024] = {0};
-    rh_libc__malloc_init( heap, 1024);
-    for( size_t i=0, j=0; i<rh_static__memory_size-j; ++i, j+=sizeof(MallocInfo_t) ){
-        uint8_t *ptr1 = rh_libc__malloc(1);
-        assert( ptr1==&heap[i] );  // 内存申请返回指针不符合逻辑, 无释放则最优解应逐字节递增
-    }
-    rh_libc__malloc_deinit();
-    print( "Test Malloc Case 0: Passed.\n" );
-}
-static void rh_libc__test_malloc_1( int (*print)(const char *format, ...) ){
-    uint8_t heap[1024] = {0};
-    rh_libc__malloc_init( heap, 1024);
-    
-    uint8_t *ptr1 = rh_libc__malloc(10);
-    uint8_t *ptr2 = rh_libc__malloc(10);
-    rh_libc__free(ptr1);
-    rh_libc__free(ptr2);
-    
-    
-    time_t foo;
-    srand((unsigned)time(&foo));
-    
-    // malloc memory for 10 times
-    void *ptrs[10] = {0};
-    for( size_t i=0; i<10; ++i ){
-        ptrs[i] = rh_libc__malloc( random()%8 );
-    }
-    
-    // shuffle the address
-    for( size_t i=0; i<0xff; ++i ){
-        size_t a = rand()%10;
-        size_t b = rand()%10;
-        void* ptr = ptrs[a];
-        ptrs[a]   = ptrs[b];
-        ptrs[b]   = ptr;
-    }
-    
-    for( size_t i=0; i<10; ++i ){
-        rh_libc__free( ptrs[i] );
-    }
-    
-    assert( !rh_static__memory_infoptr );
-    rh_libc__malloc_deinit();
-    print( "Test Malloc Case 1: Passed.\n" );
-}
-static void rh_libc__test_malloc_2( int (*print)(const char *format, ...) ){
-    uint8_t heap[1024] = {0};
-    rh_libc__malloc_init( heap, 1024);
-    time_t foo;
-    srand((unsigned)time(&foo));
-    // malloc memory for 10 times
-    void *ptrs[10] = {0};
-    for( size_t i=0; i<10; ++i ){
-        size_t size = random()%8;
-        ptrs[i] = rh_libc__malloc( size );
-        assert( ptrs[i]==rh_libc__realloc( ptrs[i], size) );
-    }
-    
-    // shuffle the address
-    for( size_t i=0; i<0xff; ++i ){
-        size_t a = rand()%10;
-        size_t b = rand()%10;
-        void* ptr = ptrs[a];
-        ptrs[a]   = ptrs[b];
-        ptrs[b]   = ptr;
-    }
-    for( size_t i=0; i<10; ++i ){
-        rh_libc__free( ptrs[i] );
-    }
-    assert( !rh_static__memory_infoptr );
-    
-    rh_libc__malloc_deinit();
-    print( "Test Malloc Case 2: Passed.\n" );
-}
-static void(*test_malloc[])( int (*print)(const char *format, ...) ) = {
-    rh_libc__test_malloc_0 , // 逐字节动态申请, 不释放
-    rh_libc__test_malloc_1 , // 随机大小动态申请, 随机顺序释放
-    rh_libc__test_malloc_2 , // 随机大小动态申请, 动态重配
-};
-
-void     rh_libc__test_malloc( int (*print)(const char *format, ...) ){
-    for( size_t i=0; i<sizeof(test_malloc)/sizeof(void*); ++i ){
-        (*test_malloc[i])(print);
-    }
-}
 
 
+size_t   rh_libc__sizefor( size_t n ){
+    if( n==0 ) return 1;
+    --n;
+    n |= n>>1;
+    n |= n>>2;
+    n |= n>>4;
+    n |= n>>8;
+    n |= n>>16;
+    return n+1;
+}
 
-//#ifdef __cplusplus
-//}
-//#endif
+#ifdef __cplusplus
+}
+#endif

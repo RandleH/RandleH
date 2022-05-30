@@ -12,6 +12,8 @@ extern unsigned long lcm      ( unsigned long a, unsigned long b, bool* overflow
 extern unsigned long fib      ( unsigned long n);
 extern bool          isprime  ( unsigned long n);
 
+extern unsigned long closest_pow2( unsigned long n );
+
 }
 
 #endif

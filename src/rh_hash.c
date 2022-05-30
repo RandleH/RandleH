@@ -107,11 +107,11 @@ unsigned int APHash    ( const char *str){
 }
 
 
-static void* (*MALLOC)(size_t) = malloc;
-static void* (*REALLOC)(void*,size_t) = realloc;
-static void  (*FREE)(void*)    = free;
+static void* (*MALLOC)(size_t)         = malloc;
+static void* (*REALLOC)(void*,size_t)  = realloc;
+static void  (*FREE)(void*)            = free;
 
-#define M_HASH_TABLE_BIT    (10)
+#define M_HASH_TABLE_BIT    (8)
 #define M_HASH_TABLE_SIZE   (1<<(M_HASH_TABLE_BIT))
 #define M_HASH_MALLOC_STEP  (16)
 
@@ -125,39 +125,81 @@ typedef struct{
     size_t        cnt;
     size_t        size;
     HashBucket_t *buf;
-}HashTableEntree_t;
-
-
-
-typedef struct{
-    HashTableEntree_t table[M_HASH_TABLE_SIZE];
-    size_t s_key;
-    size_t s_obj;
 }HashTable_t;
 
-void* rh_hash__create_( size_t size_key, size_t size_obj){
-    HashTable_t *ptr = (HashTable_t *)MALLOC(sizeof(HashTable_t));
-    ptr->s_key = size_key;
-    ptr->s_obj = size_obj;
-//    memset( ptr->table, '\0', (M_HASH_TABLE_SIZE)*sizeof(HashTable_t));
-    return ptr;
-}
 
-bool  rh_hash__insert_table( HashTableEntree_t* entree, void* key, void* object){
+#define M_JSHASH( hash, key, size )          do{\
+                                                 hash =1315423911;\
+                                                 size_t i = size;\
+                                                 while(i--) hash^=((hash<<5)+(*key++)+(hash>>2));\
+                                                 hash %= 249997;\
+                                             }while(0)
+
+
+
+void* rh_hash__create_(void){
+    HashTable_t *table = MALLOC( sizeof(HashTable_t)*M_HASH_TABLE_SIZE );
     
-    return true;
+    return memset( table, '\0', sizeof(HashTable_t)*M_HASH_TABLE_SIZE);
 }
 
-bool  rh_hash__insert_( void* handler, void* key, void* object ){
+bool  rh_hash__table_contain_( HashTable_t *table, void* key, size_t key_size){
+    for( size_t i=0; i<table->cnt; ++i ){
+        if( table->buf[i].s_key == key_size ){
+            if( memcmp( table->buf[i].key, key, key_size)==0 )  // Key exists.
+                return true;
+        }
+    }
     return false;
 }
 
-void* rh_hash__get_( void* handler, void* key){
+bool  rh_hash__table_insert_( HashTable_t *table, void* key, size_t key_size, void* obj, size_t obj_size){
+    if( rh_hash__table_contain_(table, key, key_size) )
+        return false;
+    
+    if( table->cnt == table->size ){
+        table->size += M_HASH_MALLOC_STEP;
+        table->buf = (HashBucket_t*)REALLOC( table->buf, table->size*sizeof(HashBucket_t) );
+    }
+    
+    assert( table->buf );
+    table->cnt++;
+    table->buf[ table->cnt-1 ].key   = memcpy( MALLOC(key_size), key, key_size);
+    table->buf[ table->cnt-1 ].s_key = key_size;
+    table->buf[ table->cnt-1 ].obj   = memcpy( MALLOC(obj_size), obj, obj_size);
+    assert( table->cnt<=table->size );
+    return true;
+}
+
+bool  rh_hash__insert_( void* handler, void* key, size_t key_size, void* obj, size_t obj_size ){
+    unsigned int hash = 0;
+    M_JSHASH( hash, (const char*)key, key_size);
+    hash %= 0xff;
+    
+    return rh_hash__table_insert_( &((HashTable_t*)handler)[hash], key, key_size, obj, obj_size );
+}
+
+void* rh_hash__get_( void* handler, void* key, size_t key_size){
+    unsigned int hash = 0;
+    M_JSHASH( hash, (const char*)key, key_size);
+    hash %= 0xff;
+    
+    HashTable_t* table = &((HashTable_t*)handler)[hash];
+    for( size_t i=0; i<table->cnt; ++i ){
+        if( table->buf[i].s_key == key_size ){
+            if( memcmp( table->buf[i].key, key, key_size)==0 )  // Key exists.
+                return table->buf[i].obj;
+        }
+    }
+    
     return NULL;
 }
 
-bool  rh_hash__contain_( void* handler, void* key ){
-    return true;
+bool  rh_hash__contain_( void* handler, void* key, size_t key_size ){
+    unsigned int hash = 0;
+    M_JSHASH( hash, (const char*)key, key_size);
+    hash %= 0xff;
+    return rh_hash__table_contain_( &((HashTable_t*)handler)[hash], key, key_size);
 }
 
 void* rh_hash__remove_( void* handler, void* key ){
@@ -165,24 +207,17 @@ void* rh_hash__remove_( void* handler, void* key ){
 }
 
 
+
+
+
+
+
+
+
+
+
 void hash_test(void){
-    void *Hash1 = rh_hash__create( void*, int);
-    
-    int    obj = 1;
-    void *key = &obj;
-//    rh_hash__insert( Hash1, key, obj);
-    
-    
-    
-    do{
-        char *str = (char*)alloca(sizeof(key)+1);
-        
-        memcpy( str, &key, sizeof(key));
-        
-        str[sizeof(key)] = '\0';
-        unsigned int hash = JSHash(str);
-        printf( "hash:%d\n", hash );
-    }while(0);
+
 }
 
 
