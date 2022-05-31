@@ -106,7 +106,7 @@ void  rh_heap__heapify( void *base, size_t nel, size_t width, int (*compar)(cons
     }
 }
 
-void *rh_heap__convert( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) ){
+void* rh_heap__convert( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) ){
     HeapHandler_t *res = rh_heap__create( width, compar);
     if( nel==0 ) return res;
     res->size  = nel/HEAP_MALLOC_STEP*HEAP_MALLOC_STEP+HEAP_MALLOC_STEP;
@@ -147,7 +147,7 @@ void* rh_heap__create(  size_t width, int (*compar)(const void*, const void*) ){
 //}
 
 
-void  rh_heap__insert( void* handler, void *obj ){
+void  rh_heap__push   ( void* handler, const void *obj ){
     if( ((HeapHandler_t*)handler)->cnt==((HeapHandler_t*)handler)->size ){
         ((HeapHandler_t*)handler)->size += HEAP_MALLOC_STEP;
         ((HeapHandler_t*)handler)->base  = REALLOC( ((HeapHandler_t*)handler)->base, ((HeapHandler_t*)handler)->size*((HeapHandler_t*)handler)->width );
@@ -190,7 +190,10 @@ void  rh_heap__insert( void* handler, void *obj ){
     
 }
 
-
+void  rh_heap__delete ( void* handler ){
+    FREE( ((HeapHandler_t*)handler)->base );
+    FREE( handler );
+}
 
 
 #ifdef __cplusplus

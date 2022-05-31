@@ -28,32 +28,6 @@ People say I am so crazy, a total trouble maker in life. I humbly accept that.
 
 
 
-## Why I write code
-
-
-
-### 写给真爱
-
-- 我告诉你, 我喜欢你, 并不一定是要和你在一起. 只是希望在今后的你, 遭遇人生低谷的时候, 不要灰心, 至少曾经有人被你的魅力所吸引, 曾经是, 以后也会是.
-
-  
-
-### 写给孤独
-
-- 看海久了就想见人. 见人多了, 我就想看海.
-
-
-
-- 哪里有人会真正喜欢孤独. 只是不喜欢失望罢了.
-
-
-
-### 写给自由
-
-- 所谓人生, 亦如种子, 被不期而遇的风吹走. 我们都在偶然的大地上彷徨着.
-
-
-
 
 
 ## How to use
@@ -64,8 +38,6 @@ The idea behind this libraries is that they're easy to distribute and deploy bec
 
 
 
-All libraries was developed by RandleH under the MIT license. 
-
 | Library                        | Latest Version | Language | Category | LoC  | Description                                                  |
 | ------------------------------ | -------------- | -------- | -------- | ---- | ------------------------------------------------------------ |
 | [rh_lib.hpp](./inc/rh_lib.hpp) | 0.0.1          | C++      | utility  | 151  | [read more](./doc/rh_lib.md) - Fast search and sorting algorithm |
@@ -75,6 +47,8 @@ All libraries was developed by RandleH under the MIT license.
 | [rh_color.h](./inc/rh_color.h) | 0.0.1          | C        | graphics | 159  | [read more](./doc/rh_color.md) - Common macro of color depth |
 | [rh_math.cc](./src/rh_math.cc) | 0.0.1          | C++      | math     | 70   | [read more]() - mathematics function                         |
 |                                |                |          |          |      |                                                              |
+
+All libraries was developed by RandleH under the MIT license. 
 
 
 
