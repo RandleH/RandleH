@@ -3,15 +3,26 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "rh_hash__table_insert_:rh_hash.c">
+      </ContextState>
+      <ContextState
+         contextName = "rh__heap_make_(int*, unsigned long):main.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "base[child]">
+            </PersistentString>
+            <PersistentString
+               value = "base[root]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "push_(int*, unsigned long):main.cpp">
          <PersistentStrings>
             <PersistentString
                value = "a">
             </PersistentString>
          </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "rh_hash__table_insert_:rh_hash.c">
       </ContextState>
       <ContextState
          contextName = "main:main.cpp">

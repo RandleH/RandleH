@@ -11,14 +11,27 @@
 #ifndef RH_HEAP_H
 #define RH_HEAP_H
 
+#ifdef __cplusplus
+extern "C"{
+#endif
 
+void *rh_heap__convert( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) );
+void  rh_heap__heapify( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) );
+void* rh_heap__create(                          size_t width, int (*compar)(const void*, const void*) );
 
-void  rh_heap__make   ( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) );//
+void  rh_heap__insert ( void* handler, void *obj );
+
 bool  rh_heap__isheap ( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) );//
 
-void* rh_heap__create( void );//
-void  rh_heap__insert( void* handler, void *obj, size_t obj_size, int (*compar)(const void*, const void*) );//
 
+
+
+
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
