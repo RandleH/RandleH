@@ -25,34 +25,6 @@ typedef struct{
 #define HEAP_MALLOC_STEP   16U
 
 
-
-//void  rh__heap_make_( int *base, size_t nel, int (*compar)( const void*, const void*)){
-//    if( nel==0 || nel==1 ) return;
-//
-//    // base[nel-1/2] is the first element who has a child.
-//    for( long i=(nel-1)/2; i>=0; --i ){
-//        // shift down
-//
-//        size_t root = i;
-//        while( (2*root+1)<nel ){
-//            size_t child = 2*root+1;
-//            if( child+1<nel && 1==compar( &base[child], &base[child+1]) ){
-//                child++;
-//            }
-//
-//            if( 1==compar( &base[root], &base[child]) ){
-//                swap( base[child], base[root]);
-//                root = child;
-//            }else{
-//                break;
-//            }
-//
-//        }
-//
-//    }
-//}
-
-
 #define RH_SWAP( a, b, width)       do{\
                                         size_t cnt = width;\
                                         char  *ptr1= (char*)(&a);\
@@ -69,8 +41,17 @@ typedef struct{
 #define RIGHT_CHILD_OF(x)           (LEFT_CHILD_OF(x)+1)
 #define PARENT_OF(x)                (((x)-1)>>1)
 #define FIRST_PARENT(n)             (((n)-2)>>1)
+    
+void  rh_heap__dynamic ( void* (*__malloc)(size_t), void (*__free)(void*), void* (*__realloc)(void*,size_t) ){
+    assert(__malloc);
+    assert(__free);
+    assert(__realloc);
+    MALLOC  = __malloc;
+    FREE    = __free;
+    REALLOC = __realloc;
+}
 
-void  rh_heap__heapify( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) ){
+void  rh_heap__heapify ( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) ){
     if( nel==0 || nel==1 ) return;
 
     for( ptrdiff_t i=FIRST_PARENT(nel); i>=0; --i ){
@@ -106,7 +87,7 @@ void  rh_heap__heapify( void *base, size_t nel, size_t width, int (*compar)(cons
     }
 }
 
-void* rh_heap__convert( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) ){
+void* rh_heap__convert ( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) ){
     HeapHandler_t *res = rh_heap__create( width, compar);
     if( nel==0 ) return res;
     res->size  = nel/HEAP_MALLOC_STEP*HEAP_MALLOC_STEP+HEAP_MALLOC_STEP;
@@ -117,37 +98,13 @@ void* rh_heap__convert( void *base, size_t nel, size_t width, int (*compar)(cons
     return res;
 }
 
-void* rh_heap__create(  size_t width, int (*compar)(const void*, const void*) ){
+void* rh_heap__create  (                         size_t width, int (*compar)(const void*, const void*) ){
     HeapHandler_t* res = memset( MALLOC( sizeof(HeapHandler_t) ), '\0', sizeof(HeapHandler_t));
     res->compar = compar;
     return res;
 }
 
-
-//void rh__heap_push_( int* base, size_t nel,  int (*compar)( const void* a, const void* b)){
-//    if( nel==0 ) return;
-//    size_t idx = nel-1;
-//    while( idx ){
-//        size_t l = idx-(idx%2==0);
-//        size_t r = idx+(idx%2==1);
-//        if( compar( &base[(idx-1)/2], &base[idx]) ){        // base[(idx-1)/2]>base[idx]
-//            swap(base[(idx-1)/2], base[idx]);
-//            if( r<=idx && compar( &base[l], &base[r]) ){
-//                swap( base[l], base[r]);
-//            }
-//        }else{
-//            if( r<=idx && compar( &base[l], &base[r]) ){
-//                swap( base[l], base[r]);
-//            }
-//            break;
-//        }
-//
-//        idx = (idx-1)/2;
-//    }
-//}
-
-
-void  rh_heap__push   ( void* handler, const void *obj ){
+void  rh_heap__push    ( void* handler, const void *obj ){
     if( ((HeapHandler_t*)handler)->cnt==((HeapHandler_t*)handler)->size ){
         ((HeapHandler_t*)handler)->size += HEAP_MALLOC_STEP;
         ((HeapHandler_t*)handler)->base  = REALLOC( ((HeapHandler_t*)handler)->base, ((HeapHandler_t*)handler)->size*((HeapHandler_t*)handler)->width );
@@ -189,16 +146,74 @@ void  rh_heap__push   ( void* handler, const void *obj ){
 //    printf("\n");
     
 }
+    
+void  rh_heap__top     ( void* handler,       void *obj ){
+    if( !obj || !handler || ((HeapHandler_t*)handler)->cnt==0 ) return;
+    memcpy( obj, ((HeapHandler_t*)handler)->base, ((HeapHandler_t*)handler)->width);
+}
 
-void  rh_heap__delete ( void* handler ){
+void  rh_heap__delete  ( void* handler ){
     FREE( ((HeapHandler_t*)handler)->base );
     FREE( handler );
 }
 
 
+    
+    
+    
+    
 #ifdef __cplusplus
 }
 #endif
 
+#ifdef RH_HEAP_TEST
+static void rh_heap__push_    ( int* base, size_t nel, int (*compar)( const void*, const void*)){
+    if( nel==0 ) return;
+    size_t idx = nel-1;
+    while( idx ){
+        size_t l = idx-(idx%2==0);
+        size_t r = idx+(idx%2==1);
+        if( compar( &base[(idx-1)/2], &base[idx]) ){        // base[(idx-1)/2]>base[idx]
+            std::swap(base[(idx-1)/2], base[idx]);
+            if( r<=idx && compar( &base[l], &base[r]) ){
+                std::swap( base[l], base[r]);
+            }
+        }else{
+            if( r<=idx && compar( &base[l], &base[r]) ){
+                std::swap( base[l], base[r]);
+            }
+            break;
+        }
+
+        idx = (idx-1)/2;
+    }
+}
+    
+static void rh_heap__heapify_ ( int *base, size_t nel, int (*compar)( const void*, const void*)){
+    if( nel==0 || nel==1 ) return;
+
+    // base[nel-1/2] is the first element who has a child.
+    for( long i=(nel-1)/2; i>=0; --i ){
+        // shift down
+
+        size_t root = i;
+        while( (2*root+1)<nel ){
+            size_t child = 2*root+1;
+            if( child+1<nel && 1==compar( &base[child], &base[child+1]) ){
+                child++;
+            }
+
+            if( 1==compar( &base[root], &base[child]) ){
+                std::swap( base[child], base[root]);
+                root = child;
+            }else{
+                break;
+            }
+
+        }
+
+    }
+}
+#endif
 
 

@@ -39,9 +39,9 @@ extern void     rh_libc__shell_sort  ( void *base, size_t nel, size_t width, int
 
 
 extern int      rh_libc__memswap     ( void* __a, void* __b, size_t size );
-extern void*    rh_libc__memset_area ( void* __a, int value,           size_t size, size_t strides, size_t xs, size_t ys, size_t xe, size_t ye);
-extern void*    rh_libc__memcpy_area ( void* __dst,const void* __src,  size_t size, size_t strides, size_t xs, size_t ys, size_t xe, size_t ye);
-extern void*    rh_libc__memgrb_area ( void* __dst,const void* __src,  size_t size, size_t strides, size_t xs, size_t ys, size_t xe, size_t ye);//
+extern void*    rh_libc__memset_area ( void* __a, int value,          size_t size, size_t strides, size_t xs, size_t ys, size_t xe, size_t ye);
+extern void*    rh_libc__memcpy_area ( void* __dst,const void* __src, size_t size, size_t strides, size_t xs, size_t ys, size_t xe, size_t ye);
+extern void*    rh_libc__memgrb_area ( void* __dst,const void* __src, size_t size, size_t strides, size_t xs, size_t ys, size_t xe, size_t ye);
 
 extern size_t   rh_libc__sizefor( size_t n );
 

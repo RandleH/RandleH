@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E332AECB284607A4003022A8 /* rh_img.c in Sources */ = {isa = PBXBuildFile; fileRef = E332AECA284607A4003022A8 /* rh_img.c */; };
 		E3A5EC93283D7BF5003D754E /* rh_lib.c in Sources */ = {isa = PBXBuildFile; fileRef = E3A5EC8F283D7BF5003D754E /* rh_lib.c */; };
 		E3A5EC94283D7BF5003D754E /* rh_image.cc in Sources */ = {isa = PBXBuildFile; fileRef = E3A5EC90283D7BF5003D754E /* rh_image.cc */; };
 		E3A5EC95283D7BF5003D754E /* rh_lib.cc in Sources */ = {isa = PBXBuildFile; fileRef = E3A5EC91283D7BF5003D754E /* rh_lib.cc */; };
@@ -31,6 +32,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E332AECA284607A4003022A8 /* rh_img.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rh_img.c; path = ../src/rh_img.c; sourceTree = "<group>"; };
+		E332AECD284607AF003022A8 /* rh_img.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rh_img.h; path = ../inc/rh_img.h; sourceTree = "<group>"; };
 		E3A5EC7D283D7B4E003D754E /* Xcode12 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Xcode12; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3A5EC8B283D7BE4003D754E /* rh_lib.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = rh_lib.hpp; path = ../inc/rh_lib.hpp; sourceTree = "<group>"; };
 		E3A5EC8C283D7BE4003D754E /* rh_lib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rh_lib.h; path = ../inc/rh_lib.h; sourceTree = "<group>"; };
@@ -88,6 +91,7 @@
 		E3A5EC89283D7BB8003D754E /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				E332AECD284607AF003022A8 /* rh_img.h */,
 				E3A9D6A428449C6A00DC9020 /* rh_heap.h */,
 				E3AC259828420FBD006433C1 /* rh_hash.h */,
 				E3A5ECA1283EE84D003D754E /* rh_color.h */,
@@ -102,6 +106,7 @@
 		E3A5EC8A283D7BBD003D754E /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E332AECA284607A4003022A8 /* rh_img.c */,
 				E3A9D6A128449C6000DC9020 /* rh_heap.c */,
 				E3AC25952842055F006433C1 /* rh_hash.c */,
 				E3A5EC90283D7BF5003D754E /* rh_image.cc */,
@@ -197,6 +202,7 @@
 				E3A5EC95283D7BF5003D754E /* rh_lib.cc in Sources */,
 				E3A5EC96283D7BF5003D754E /* rh_math.cc in Sources */,
 				E3A5EC93283D7BF5003D754E /* rh_lib.c in Sources */,
+				E332AECB284607A4003022A8 /* rh_img.c in Sources */,
 				E3A9D6A228449C6000DC9020 /* rh_heap.c in Sources */,
 				E3A5EC99283D7CBB003D754E /* main.cpp in Sources */,
 				E3A5EC94283D7BF5003D754E /* rh_image.cc in Sources */,

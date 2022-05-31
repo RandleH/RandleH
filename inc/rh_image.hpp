@@ -6,9 +6,6 @@
 #include <cstdint>
 #include <cstddef>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 namespace rh_image{
 
 template<typename T>
