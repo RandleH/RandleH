@@ -152,6 +152,27 @@ void  rh_heap__top     ( void* handler,       void *obj ){
     memcpy( obj, ((HeapHandler_t*)handler)->base, ((HeapHandler_t*)handler)->width);
 }
 
+void  rh_heap__reserve ( void* handler, size_t nel){
+    if( !handler ) return;
+    if( ((HeapHandler_t*)handler)->size >= nel) return;
+    ((HeapHandler_t*)handler)->size = nel;
+    ((HeapHandler_t*)handler)->base = REALLOC( ((HeapHandler_t*)handler)->base, ((HeapHandler_t*)handler)->width*nel );
+}
+
+void  rh_heap__shrink  ( void* handler ){
+    if( !handler ) return;
+    
+    if( ((HeapHandler_t*)handler)->cnt==0 ){
+        FREE( ((HeapHandler_t*)handler)->base );
+        ((HeapHandler_t*)handler)->base = NULL;
+        ((HeapHandler_t*)handler)->size = 0;
+    }else if( ((HeapHandler_t*)handler)->cnt < ((HeapHandler_t*)handler)->size ){
+        ((HeapHandler_t*)handler)->size = ((HeapHandler_t*)handler)->cnt;
+        ((HeapHandler_t*)handler)->base = REALLOC( ((HeapHandler_t*)handler)->base, ((HeapHandler_t*)handler)->width*((HeapHandler_t*)handler)->size );
+    }
+    
+}
+    
 void  rh_heap__delete  ( void* handler ){
     FREE( ((HeapHandler_t*)handler)->base );
     FREE( handler );

@@ -24,12 +24,11 @@ void* rh_heap__create  (                         size_t width, int (*compar)(con
 void  rh_heap__push    ( void* handler, const void *obj );
 void  rh_heap__top     ( void* handler,       void *obj );
 void  rh_heap__pop     ( void* handler );//
+void  rh_heap__reserve ( void* handler, size_t nel);
+void  rh_heap__shrink  ( void* handler );
 void  rh_heap__delete  ( void* handler );
 
 bool  rh_heap__is_heap ( void *base, size_t nel, size_t width, int (*compar)(const void*, const void*) );//
-
-
-
 
 
 
