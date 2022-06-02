@@ -13,7 +13,6 @@
 		E3A5EC95283D7BF5003D754E /* rh_lib.cc in Sources */ = {isa = PBXBuildFile; fileRef = E3A5EC91283D7BF5003D754E /* rh_lib.cc */; };
 		E3A5EC96283D7BF5003D754E /* rh_math.cc in Sources */ = {isa = PBXBuildFile; fileRef = E3A5EC92283D7BF5003D754E /* rh_math.cc */; };
 		E3A5EC99283D7CBB003D754E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3A5EC98283D7CBB003D754E /* main.cpp */; };
-		E3A5EC9D283D8291003D754E /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3A5EC9B283D8291003D754E /* test.cpp */; };
 		E3A5ECAB2840B44C003D754E /* rh_texash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3A5ECAA2840B44C003D754E /* rh_texash.cpp */; };
 		E3A9D6A228449C6000DC9020 /* rh_heap.c in Sources */ = {isa = PBXBuildFile; fileRef = E3A9D6A128449C6000DC9020 /* rh_heap.c */; };
 		E3AC25962842055F006433C1 /* rh_hash.c in Sources */ = {isa = PBXBuildFile; fileRef = E3AC25952842055F006433C1 /* rh_hash.c */; };
@@ -44,8 +43,6 @@
 		E3A5EC91283D7BF5003D754E /* rh_lib.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rh_lib.cc; path = ../src/rh_lib.cc; sourceTree = "<group>"; };
 		E3A5EC92283D7BF5003D754E /* rh_math.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rh_math.cc; path = ../src/rh_math.cc; sourceTree = "<group>"; };
 		E3A5EC98283D7CBB003D754E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		E3A5EC9B283D8291003D754E /* test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
-		E3A5EC9C283D8291003D754E /* test.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = test.hpp; sourceTree = "<group>"; };
 		E3A5ECA1283EE84D003D754E /* rh_color.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rh_color.h; path = ../inc/rh_color.h; sourceTree = "<group>"; };
 		E3A5ECA62840ADC0003D754E /* rh_texash.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = rh_texash.hpp; path = ../app/poker/texas_holdem/rh_texash.hpp; sourceTree = "<group>"; };
 		E3A5ECA82840B21A003D754E /* rh_poker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = rh_poker.hpp; path = ../app/poker/rh_poker.hpp; sourceTree = "<group>"; };
@@ -54,6 +51,7 @@
 		E3A9D6A428449C6A00DC9020 /* rh_heap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rh_heap.h; path = ../inc/rh_heap.h; sourceTree = "<group>"; };
 		E3AC25952842055F006433C1 /* rh_hash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rh_hash.c; path = ../src/rh_hash.c; sourceTree = "<group>"; };
 		E3AC259828420FBD006433C1 /* rh_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rh_hash.h; path = ../inc/rh_hash.h; sourceTree = "<group>"; };
+		E3E658C02848925E00FB986A /* rh_test_heap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = rh_test_heap.hpp; path = ../test/rh_test_heap.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,13 +68,12 @@
 		E3A5EC74283D7B4E003D754E = {
 			isa = PBXGroup;
 			children = (
+				E3E658BF2848924800FB986A /* test */,
 				E3A5ECA32840AD90003D754E /* app */,
 				E3A5EC8A283D7BBD003D754E /* src */,
 				E3A5EC89283D7BB8003D754E /* inc */,
 				E3A5EC7E283D7B4E003D754E /* Products */,
 				E3A5EC98283D7CBB003D754E /* main.cpp */,
-				E3A5EC9B283D8291003D754E /* test.cpp */,
-				E3A5EC9C283D8291003D754E /* test.hpp */,
 			);
 			sourceTree = "<group>";
 		};
@@ -143,6 +140,14 @@
 			name = texas_holdem;
 			sourceTree = "<group>";
 		};
+		E3E658BF2848924800FB986A /* test */ = {
+			isa = PBXGroup;
+			children = (
+				E3E658C02848925E00FB986A /* rh_test_heap.hpp */,
+			);
+			name = test;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -207,7 +212,6 @@
 				E3A5EC99283D7CBB003D754E /* main.cpp in Sources */,
 				E3A5EC94283D7BF5003D754E /* rh_image.cc in Sources */,
 				E3A5ECAB2840B44C003D754E /* rh_texash.cpp in Sources */,
-				E3A5EC9D283D8291003D754E /* test.cpp in Sources */,
 				E3AC25962842055F006433C1 /* rh_hash.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
