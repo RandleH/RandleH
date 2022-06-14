@@ -12,6 +12,7 @@
 #include "rh_color.h"
 #include "rh_hash.h"
 #include "rh_heap.h"
+#include "rh_stack.h"
 
 #include <iostream>
 #include <vector>
@@ -19,64 +20,38 @@
 #include <stack>
 using namespace std;
 
+#include <unistd.h>
+#include <stdio.h>
 
-#define RH_SWAP(x,y)            do{\
-                                    assert(sizeof(x)==sizeof(y));\
-                                    RH_SWAP_PTR_S( &x, &y, sizeof(x));\
-                                }while(0)
-
-#define RH_SWAP_PTR_S(p1,p2,s)  do{\
-                                    switch(s){\
-                                        case 1:{\
-                                          (*(uint8_t*)(p1))  ^= (*(uint8_t*)(p2));\
-                                          (*(uint8_t*)(p2))  ^= (*(uint8_t*)(p1));\
-                                          (*(uint8_t*)(p1))  ^= (*(uint8_t*)(p2));\
-                                          break;\
-                                        }\
-                                        case 2:{\
-                                          (*(uint16_t*)(p1)) ^= (*(uint16_t*)(p2));\
-                                          (*(uint16_t*)(p2)) ^= (*(uint16_t*)(p1));\
-                                          (*(uint16_t*)(p1)) ^= (*(uint16_t*)(p2));\
-                                          break;\
-                                        }\
-                                        case 4:{\
-                                          (*(uint32_t*)(p1)) ^= (*(uint32_t*)(p2));\
-                                          (*(uint32_t*)(p2)) ^= (*(uint32_t*)(p1));\
-                                          (*(uint32_t*)(p1)) ^= (*(uint32_t*)(p2));\
-                                          break;\
-                                        }\
-                                        case 8:{\
-                                          (*(uint64_t*)(p1)) ^= (*(uint64_t*)(p2));\
-                                          (*(uint64_t*)(p2)) ^= (*(uint64_t*)(p1));\
-                                          (*(uint64_t*)(p1)) ^= (*(uint64_t*)(p2));\
-                                          break;\
-                                        }\
-                                        default:{\
-                                          for( size_t i=0; i<s; ++i ){\
-                                              ((char*)(p1))[i] ^= ((char*)(p2))[i];\
-                                              ((char*)(p2))[i] ^= ((char*)(p1))[i];\
-                                              ((char*)(p1))[i] ^= ((char*)(p2))[i];\
-                                          }\
-                                          break;\
-                                        }\
-                                    }\
-                                }while(0)
-
-
-typedef int var;
-
-int compar( const void *a, const void *b ){
-    printf("CMP: %d, %d = %d\n", *(var*)a, *(var*)b, ((*(var*)a) < (*(var*)b)));
-    return (*(var*)a) < (*(var*)b);
+int rh_sdcard__echo ( const char *__f, const char *__mode, const char *__data, size_t __len){
+    FILE *file = fopen( __f, __mode);
+    if( file==NULL ) return -1;
+    fwrite( __data, 1, __len, file);
+    fclose(file);
+    return 0;
 }
 
 
-#include "../test/rh_test_heap.hpp"
+static int compar_int_less(const void *a, const void *b){
+    return (*(int*)a) < (*(int*)b);
+}
+
+static int compar_int_greater(const void *a, const void *b){
+    return (*(int*)a) > (*(int*)b);
+}
+
 
 int main(){
     
-    rh_heap__test(printf);
     
+    rh_heap__heapify( array, sizeof(array)/sizeof(*array), sizeof(int), compar_int_less);
+    
+    vector<int> v = { 4,5,8,2,4,9,7,1,-3, 0};
+    rh_heap__heapify( &v[0], v.size(), sizeof(int), compar_int_less);
+    
+    cout<<std::is_heap(v.begin(), v.end(), std::less<int>());
+    
+//    rh_heap__heapify(<#void *base#>, <#size_t nel#>, <#size_t width#>, <#int (*compar)(const void *, const void *)#>)
     return 0;
 }
 

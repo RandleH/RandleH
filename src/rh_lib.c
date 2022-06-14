@@ -190,6 +190,7 @@ void*    rh_libc__calloc(size_t count, size_t size){
     return memset( ptr, 0, byt );
 }
 void     rh_libc__free( void* ptr){
+    if( !ptr ) return;
     assert( rh_static__memory_infocnt!=0 );
     size_t a = rh_libc__locate(ptr);
 

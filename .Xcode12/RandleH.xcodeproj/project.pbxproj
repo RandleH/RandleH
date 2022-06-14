@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E32B26232849816300C064DE /* rh_stack.c in Sources */ = {isa = PBXBuildFile; fileRef = E32B26222849815E00C064DE /* rh_stack.c */; };
 		E332AECB284607A4003022A8 /* rh_img.c in Sources */ = {isa = PBXBuildFile; fileRef = E332AECA284607A4003022A8 /* rh_img.c */; };
 		E3A5EC93283D7BF5003D754E /* rh_lib.c in Sources */ = {isa = PBXBuildFile; fileRef = E3A5EC8F283D7BF5003D754E /* rh_lib.c */; };
 		E3A5EC94283D7BF5003D754E /* rh_image.cc in Sources */ = {isa = PBXBuildFile; fileRef = E3A5EC90283D7BF5003D754E /* rh_image.cc */; };
@@ -31,6 +32,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E32B26222849815E00C064DE /* rh_stack.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = rh_stack.c; path = ../src/rh_stack.c; sourceTree = "<group>"; };
+		E32B26252849817000C064DE /* rh_stack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rh_stack.h; path = ../inc/rh_stack.h; sourceTree = "<group>"; };
 		E332AECA284607A4003022A8 /* rh_img.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rh_img.c; path = ../src/rh_img.c; sourceTree = "<group>"; };
 		E332AECD284607AF003022A8 /* rh_img.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rh_img.h; path = ../inc/rh_img.h; sourceTree = "<group>"; };
 		E3A5EC7D283D7B4E003D754E /* Xcode12 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Xcode12; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				E332AECD284607AF003022A8 /* rh_img.h */,
+				E32B26252849817000C064DE /* rh_stack.h */,
 				E3A9D6A428449C6A00DC9020 /* rh_heap.h */,
 				E3AC259828420FBD006433C1 /* rh_hash.h */,
 				E3A5ECA1283EE84D003D754E /* rh_color.h */,
@@ -104,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				E332AECA284607A4003022A8 /* rh_img.c */,
+				E32B26222849815E00C064DE /* rh_stack.c */,
 				E3A9D6A128449C6000DC9020 /* rh_heap.c */,
 				E3AC25952842055F006433C1 /* rh_hash.c */,
 				E3A5EC90283D7BF5003D754E /* rh_image.cc */,
@@ -210,6 +215,7 @@
 				E332AECB284607A4003022A8 /* rh_img.c in Sources */,
 				E3A9D6A228449C6000DC9020 /* rh_heap.c in Sources */,
 				E3A5EC99283D7CBB003D754E /* main.cpp in Sources */,
+				E32B26232849816300C064DE /* rh_stack.c in Sources */,
 				E3A5EC94283D7BF5003D754E /* rh_image.cc in Sources */,
 				E3A5ECAB2840B44C003D754E /* rh_texash.cpp in Sources */,
 				E3AC25962842055F006433C1 /* rh_hash.c in Sources */,
