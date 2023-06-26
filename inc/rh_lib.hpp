@@ -1,12 +1,47 @@
+/**
+  ******************************************************************************
+  * @file    rh_lib.hh
+  * @author  RandleH
+  * @brief   This file contains basic algorithm.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 RandleH.
+  * All rights reserved.
+  *
+  * This software component is licensed by RandleH under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
+  *
+  ******************************************************************************
+  */
+
+
+
 #ifndef RH_LIB_H
 #define RH_LIB_H
 
+
+/* Includes ------------------------------------------------------------------*/
 #include <cstdbool>
 #include <cstddef>
 #include <algorithm>
 
+
+/* Namespace -----------------------------------------------------------------*/
 namespace rh_lib{
 
+
+/**
+ *@brief Apply binary search algorithm to a sorted list of items.
+ *@param    first   Random access iterator of the beginning
+ *@param    last     Random access iterator of the end
+ *@param    target Item to be found
+ *@return
+ *  @if FOUND   The first term indicating the index in the list and the second term will be set to TRUE
+ *  @else The second term will be set to FALSE and the first term indicates where should be inserted
+ */
 template<class _RandomAccessIterator, class T>
 std::pair<ptrdiff_t,bool> binary_search      ( _RandomAccessIterator first, _RandomAccessIterator last, const T& target){
     if( first==last ) return std::make_pair( 0, false);
@@ -27,6 +62,7 @@ std::pair<ptrdiff_t,bool> binary_search      ( _RandomAccessIterator first, _Ran
     }
     return std::make_pair( l, false);
 }
+
 
 template<class _RandomAccessIterator, class T>
 std::pair<ptrdiff_t,bool> binary_search_upper( _RandomAccessIterator first, _RandomAccessIterator last, const T& target){
@@ -70,6 +106,12 @@ ptrdiff_t                 partition_sort     ( _RandomAccessIterator first, _Ran
     return (ptrdiff_t)(__idx-first);
 }
 
+
+/**
+ *@brief    This function uses quick sort algorithm to rearrange a list. Recursive program style will be implemented
+ *@param    first   Random access iterator of the beginning
+ *@param    last     Random access iterator of the end
+ */
 template<class _RandomAccessIterator>
 void                      qsort              ( _RandomAccessIterator first, _RandomAccessIterator last){
     ptrdiff_t __len = last - first -1;
@@ -89,6 +131,11 @@ void                      qsort              ( _RandomAccessIterator first, _Ran
     
 }
 
+/**
+ *@brief    This function uses merge sort algorithm to rearrange a list. Recursive program style will be implemented
+ *@param    first   Random access iterator of the beginning
+ *@param    last     Random access iterator of the end
+ */
 template<class _RandomAccessIterator>
 void                      msort              ( _RandomAccessIterator first, _RandomAccessIterator last){
     ptrdiff_t __len = last-first;
@@ -120,10 +167,16 @@ void                      msort              ( _RandomAccessIterator first, _Ran
     memcpy( &(*first), ptmp, __len*size);
 }
 
+/**
+ *@brief    This function used quick heap algorithm to rearrange a list. Recursive program style will be implemented
+ *@param    first   Random access iterator of the beginning
+ *@param    last     Random access iterator of the end
+ */
 template<class _RandomAccessIterator>
 void                      hsort              ( _RandomAccessIterator first, _RandomAccessIterator last){
     
 }
+
 
 long rand( void ){
     static uint32_t a = (uint32_t)0x3A97BFE0U;
@@ -149,3 +202,9 @@ long rand( long __s, long __e){
 
 
 #endif
+
+
+
+
+/************************ (C) COPYRIGHT RandleH *****END OF FILE***************/
+

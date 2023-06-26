@@ -42,16 +42,18 @@ static int compar_int_greater(const void *a, const void *b){
 
 
 int main(){
+    // { 0, 3, 4, 5, 7, 8, 10, 12, 238}
+    std::vector<int> v = {10, 12, 14};
     
     
-    rh_heap__heapify( array, sizeof(array)/sizeof(*array), sizeof(int), compar_int_less);
+    auto res = rh_lib::binary_search( v.begin(), v.end(), 9);
     
-    vector<int> v = { 4,5,8,2,4,9,7,1,-3, 0};
-    rh_heap__heapify( &v[0], v.size(), sizeof(int), compar_int_less);
+    if( res.second){
+        cout<< "Found it @"<< res.first << endl;
+    }else{
+        cout<< "Not found"<< endl;
+    }
     
-    cout<<std::is_heap(v.begin(), v.end(), std::less<int>());
-    
-//    rh_heap__heapify(<#void *base#>, <#size_t nel#>, <#size_t width#>, <#int (*compar)(const void *, const void *)#>)
     return 0;
 }
 
