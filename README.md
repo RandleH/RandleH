@@ -8,8 +8,6 @@
 
 
 
-"Randle" is my alias. 
-
 
 
 ## How to use
@@ -32,11 +30,6 @@ The idea behind this libraries is that they're easy to distribute and deploy bec
 
 All libraries was developed by RandleH under the MIT license. 
 
-
-
-## Who I am
-
-Hello, my name is YuanJi Qiu. I am current graduate student at University of Southern California majoring electrical computer engineering. I was also undergraduates research assistant of two projects in 2019. I designed a multiplatform UI program for embedded system in 2020. Meanwhile I was employed as a full-time embedded system software engineer. 
 
 
 
